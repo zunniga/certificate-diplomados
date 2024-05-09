@@ -1,0 +1,44 @@
+{
+  "name": "certificate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build:web": "next build",
+    "start:web": "next start",
+    "build:desktop": "tsc -p electron/tsconfig.json",
+    "start:desktop": "npm run build:desktop && electron ./build/electron.js",
+    "test": "next test",
+    "eject": "next eject",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "dexie": "^4.0.4",
+    "dexie-react-hooks": "^1.1.7",
+    "file-saver": "^2.0.5",
+    "fs": "^0.0.1-security",
+    "idb": "^8.0.0",
+    "jspdf": "^2.5.1",
+    "next": "14.2.3",
+    "react-dom": "^18",
+    "react-icons": "^5.1.0",
+    "react-slick": "^0.30.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/file-saver": "^2.0.7",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/react-slick": "^0.23.13",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "daisyui": "^4.10.2",
+    "electron": "^30.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5"
+  }
+}
