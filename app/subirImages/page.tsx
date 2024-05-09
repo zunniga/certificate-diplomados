@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useImageUploader } from "@/Components/ImageUploaderDB";
@@ -6,8 +5,8 @@ import { IoIosExit } from "react-icons/io";
 
 export default function Home() {
     const { guardarImagenes } = useImageUploader();
-    const [enabledInputs, setEnabledInputs] = useState<boolean[]>([true, true, true]); // Cambiado a true
-    const [files, setFiles] = useState<Array<File | null>>([null, null, null]);
+    const [enabledInputs, setEnabledInputs] = useState<boolean[]>([true, true]); // Cambiado a true
+    const [files, setFiles] = useState<Array<File | null>>([null, null]);
 
     useEffect(() => {
         // Verificar si el usuario está autenticado
@@ -49,8 +48,6 @@ export default function Home() {
                     nombre = 'imgCertiDigital';
                 } else if (index === 1) {
                     nombre = 'imgCertiPhisyc';
-                } else if (index === 2) {
-                    nombre = 'imgCertiOnly';
                 }
                 return { file, nombre };
             }
@@ -73,13 +70,11 @@ export default function Home() {
 
             <h1 className="text-4xl font-bold tracking-tight text-gray-500 sm:text-5xl md:text-6xl p-6 mb-8">
                 <span className="block">
-                    Modelo de diplomado para modificar
-                    
-
+                    Modelo de diploma para modificar
                 </span>
             </h1>
             <div className="flex flex-row">
-                {[0, 1, 2].map((index) => (
+                {[0, 1].map((index) => (
                     <div key={index} className="mr-10 flex">
                         <div className="flex items-end">
                             <input

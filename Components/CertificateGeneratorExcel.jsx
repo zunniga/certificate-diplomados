@@ -34,6 +34,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
         console.error("Error al verificar la existencia de datos:", error);
       }
     };
+    
     checkDataExists();
   }, []);
 

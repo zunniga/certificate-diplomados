@@ -1,14 +1,14 @@
-'use client';
-import React, { useRef, useState, useEffect } from 'react';
-import ReadExcelParticipants from '@/Components/ReadExcelParticipants';
-import CertificateGeneratorExcel from '@/Components/CertificateGeneratorExcel'
-import CertificateGenerator from '@/Components/CertificateGenerator'
-import Link from 'next/link';
+"use client";
+import React, { useRef, useState, useEffect } from "react";
+import ReadExcelParticipants from "@/Components/ReadExcelParticipants";
+import CertificateGeneratorExcel from "@/Components/CertificateGeneratorExcel";
+import CertificateGenerator from "@/Components/CertificateGenerator";
+import Link from "next/link";
 import { IoCloseCircle } from "react-icons/io5";
-import jsPDF from 'jspdf';
-import { saveAs } from 'file-saver';
-import { ImageDatabase } from '@/Components/ImageUploaderDB';
-import { ImageMagnifier } from '@/Components/imgMagnifier';
+import jsPDF from "jspdf";
+import { saveAs } from "file-saver";
+import { ImageDatabase } from "@/Components/ImageUploaderDB";
+import { ImageMagnifier } from "@/Components/imgMagnifier";
 
 const imageDB = new ImageDatabase(); // Asegúrate de crear la instancia de la base de datos
 
@@ -16,13 +16,20 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const modalRef = useRef<HTMLDialogElement>(null);
   const excelModalRef = useRef<HTMLDialogElement>(null);
-  const [generatedCertificates, setGeneratedCertificates] = useState<string[]>([]);
+  const [generatedCertificates, setGeneratedCertificates] = useState<string[]>(
+    []
+  );
 
   useEffect(() => {
     const obtenerCertificados = async () => {
       try {
-        const certificates = await imageDB.certificates.where('type').equals('certificadoDigital').toArray();
-        setGeneratedCertificates(certificates.map(certificate => certificate.certificateDataURL));
+        const certificates = await imageDB.certificates
+          .where("type")
+          .equals("certificadoDigital")
+          .toArray();
+        setGeneratedCertificates(
+          certificates.map((certificate) => certificate.certificateDataURL)
+        );
       } catch (error) {
         console.error("Error al obtener los certificados:", error);
       }
@@ -30,11 +37,28 @@ export default function Home() {
 
     obtenerCertificados();
   }, []);
+  // Función para abrir o cerrar la lista
+  const [listaAbierta, setListaAbierta] = useState(false);
+
+  // Función para abrir o cerrar la lista
+  const toggleLista = () => {
+    setListaAbierta(!listaAbierta);
+  };
+
+  const openModulares = () => {
+    // Aquí puedes realizar las acciones necesarias al abrir el modal
+    console.log("Abrir modal de Excel");
+  };
 
   const actualizarCertificados = async () => {
     try {
-      const certificates = await imageDB.certificates.where('type').equals('certificadoDigital').toArray();
-      setGeneratedCertificates(certificates.map(certificate => certificate.certificateDataURL));
+      const certificates = await imageDB.certificates
+        .where("type")
+        .equals("certificadoDigital")
+        .toArray();
+      setGeneratedCertificates(
+        certificates.map((certificate) => certificate.certificateDataURL)
+      );
     } catch (error) {
       console.error("Error al obtener los certificados:", error);
     }
@@ -51,7 +75,10 @@ export default function Home() {
   const eliminarImagen = async () => {
     try {
       const certificateDataURL = generatedCertificates[currentImageIndex];
-      const imageToDelete = await imageDB.certificates.where('certificateDataURL').equals(certificateDataURL).first();
+      const imageToDelete = await imageDB.certificates
+        .where("certificateDataURL")
+        .equals(certificateDataURL)
+        .first();
       console.log(imageToDelete);
       if (imageToDelete) {
         await imageDB.certificates.delete(imageToDelete.id);
@@ -67,14 +94,17 @@ export default function Home() {
 
   const goPrevious = () => {
     const lastIndex = generatedCertificates.length - 1;
-    setCurrentImageIndex(currentImageIndex === 0 ? lastIndex : currentImageIndex - 1);
+    setCurrentImageIndex(
+      currentImageIndex === 0 ? lastIndex : currentImageIndex - 1
+    );
   };
 
   const goNext = () => {
     const lastIndex = generatedCertificates.length - 1;
-    setCurrentImageIndex(currentImageIndex === lastIndex ? 0 : currentImageIndex + 1);
+    setCurrentImageIndex(
+      currentImageIndex === lastIndex ? 0 : currentImageIndex + 1
+    );
   };
-
 
   const openModal = () => {
     if (modalRef.current) {
@@ -108,14 +138,10 @@ export default function Home() {
         <ul className="steps w-full">
           {/* Envuelve cada <li> en un componente <Link> */}
           <li className="step step-info ">
-            <Link href="/cursos/" >
-              Insercion de Participantes
-            </Link>
+            <Link href="/cursos/">Insercion de Participantes</Link>
           </li>
           <li className="step">
-            <Link href="/cursos/cert_phisyc/" >
-              Certificado físico
-            </Link>
+            <Link href="/cursos/cert_phisyc/">Certificado físico</Link>
           </li>
           <li className="step">
             <Link href="/cursos/cert_soloemp" passHref>
@@ -137,39 +163,72 @@ export default function Home() {
           <div className="w-1/3 p-4 bg-cyan-500 text-white mt-4 h-full rounded-r-xl">
             <ul>
               <li>
-                <button className="w-full btn bg-sky-700 text-white hover:bg-gray-200" onClick={openModal}>
+                <button
+                  className="w-full btn bg-sky-700 text-white hover:bg-gray-200"
+                  onClick={openModal}
+                >
                   Agregar manualmente
                 </button>
               </li>
               <li>
-                <button className="w-full btn  bg-sky-700 text-white hover:bg-gray-200 mt-2" onClick={openExcelModal}>
+                <button
+                  className="w-full btn  bg-sky-700 text-white hover:bg-gray-200 mt-2"
+                  onClick={openExcelModal}
+                >
                   Insertar por Excel
                 </button>
               </li>
-              <li className=''>
-                <CertificateGeneratorExcel  onCertificateGenerated={actualizarCertificados} onDeleteData={updateButton} />
+              <li className="">
+                <CertificateGeneratorExcel
+                  onCertificateGenerated={actualizarCertificados}
+                  onDeleteData={updateButton}
+                />
+              </li>
+              <li>
+                <button
+                  className="w-full btn bg-sky-700 text-white hover:bg-gray-200 mt-2"
+                  onClick={toggleLista}
+                >
+                  Lista de Modulares
+                </button>
+                {listaAbierta && (
+                  <ul>
+                    <li>Opción 1</li>
+                    <li>Opción 2</li>
+                    <li>Opción 3</li>
+                    {/* Puedes agregar más opciones aquí */}
+                  </ul> 
+                )}
               </li>
 
-              <li className='join grid grid-cols-2 mt-3 '>
-              <button onClick={goPrevious} className="btn bg-gray-800 text-white hover:bg-gray-600 mr-2">
-                Anterior
-              </button>
-              <button onClick={goNext} className="btn bg-gray-800 text-white  hover:bg-gray-600 ml-2">
-                Siguiente
-              </button>
+              <li className="join grid grid-cols-2 mt-3 ">
+                <button
+                  onClick={goPrevious}
+                  className="btn bg-gray-800 text-white hover:bg-gray-600 mr-2"
+                >
+                  Anterior
+                </button>
+                <button
+                  onClick={goNext}
+                  className="btn bg-gray-800 text-white  hover:bg-gray-600 ml-2"
+                >
+                  Siguiente
+                </button>
               </li>
 
               <li>
-
                 <div className="join grid grid-cols-2 mt-3 ">
                   <Link href="/" passHref legacyBehavior>
-                    <button className="join-item bg-slate-200 btn btn-outline text-gray-900">Button</button>
+                    <button className="join-item bg-slate-200 btn btn-outline text-gray-900">
+                      Button
+                    </button>
                   </Link>
                   <Link href="/cursos/cert_phisyc" passHref legacyBehavior>
-                    <button className="join-item bg-slate-200 text-gray-900 btn">Button</button>
+                    <button className="join-item bg-slate-200 text-gray-900 btn">
+                      Button
+                    </button>
                   </Link>
                 </div>
-
               </li>
             </ul>
           </div>
@@ -177,14 +236,18 @@ export default function Home() {
             {/* Contador de imágenes */}
             <div className="mb-4 text-white flex items-center justify-between">
               {/* Botón Anterior */}
-              
+
               {/* Contador de imágenes */}
               <div className="  text-white flex items-center justify-between w-full">
                 <div className="join">
                   {generatedCertificates.map((_, index) => (
                     <button
                       key={index}
-                      className={`join-item btn ${index === currentImageIndex ? 'bg-cyan-500 text-white' : ''}`}
+                      className={`join-item btn ${
+                        index === currentImageIndex
+                          ? "bg-cyan-500 text-white"
+                          : ""
+                      }`}
                       onClick={() => setCurrentImageIndex(index)}
                     >
                       {index + 1}
@@ -192,33 +255,34 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-
-              {/* Botón Siguiente */}
-              
-              {/* Botón Eliminar */}
-             
             </div>
 
-
             {/* Imagen */}
-            <div className="carousel-container max-w-[88%] flex flex-col items-center mb-14"> {/* Ajustar max-w-lg según sea necesario */}
+            <div className="carousel-container max-w-[88%] flex flex-col items-center mb-14">
+              {" "}
+              {/* Ajustar max-w-lg según sea necesario */}
               {generatedCertificates.length > 0 ? (
                 <ImageMagnifier
                   src={generatedCertificates[currentImageIndex]}
                   magnifierHeight={150}
                   magnifieWidth={300}
-                  zoomLevel={3.5}
+                  zoomLevel={1.5}
                   alt={`Generated Certificate ${currentImageIndex}`}
                 />
               ) : (
-
-                <img className="image-container w-3/4"  src="../Images/cert-digital.png" alt="No Image Here" />
+                <img
+                  className="image-container w-3/4"
+                  src="../Images/cert-digital.png"
+                  alt="No Image Here"
+                />
               )}
-              <button className="ml-20 btn bg-cyan-600 text-white hover:bg-red-400" onClick={eliminarImagen}>
+              <button
+                className="ml-20 btn bg-cyan-600 text-white hover:bg-red-400"
+                onClick={eliminarImagen}
+              >
                 Eliminar Certificado
               </button>
             </div>
-            
           </div>
         </div>
       </div>
