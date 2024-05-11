@@ -36,20 +36,19 @@ const ReadExcelParticipants = () => {
       const wb = XLSX.read(bufferArray, { type: 'buffer' });
       const ws = wb.Sheets[wb.SheetNames[0]];
 
-      const CursoName = ws['C1'] ? ws['C1'].v : '';
-      const FechaInicio = ws['C2'] ? ws['C2'].v : '';
-      const FechaFin = ws['C3'] ? ws['C3'].v : '';
-      /* const Modulares = ws['C3'] ? ws['C3'].v : ''; */
-      const Resolucion = ws['C5'] ? ws['C5'].v : '';
-      const CrediHoras = ws['C6'] ? ws['C6'].v : '';
-
+      const CursoName = ws['B1'] ? ws['B1'].v : '';
+      const FechaInicio = ws['B2'] ? ws['B2'].v : '';
+      const FechaFin = ws['B3'] ? ws['B3'].v : '';
+      const Ponente = ws['B5'] ? ws['B5'].v : '';
+      const Temario = ws['B4'] ? ws['B4'].v : '';
+      const HorasAcademicas = ws['B6'] ? ws['B6'].v : '';
 
       const participantes = [];
-      let rowIndex = 13;
-      while (ws['B' + rowIndex]) {
-        const participantName = ws['B' + rowIndex].v;
-        const codigoParticipante = ws['P' + rowIndex].v;
-        const estadoPago = ws['T' + rowIndex] ? ws['T' + rowIndex].v : '';
+      let rowIndex = 12;
+      while (ws['A' + rowIndex]) {
+        const participantName = ws['A' + rowIndex].v;
+        const codigoParticipante = ws['I' + rowIndex].v;
+        const estadoPago = ws['M' + rowIndex] ? ws['M' + rowIndex].v : '';
 
         const participanteData = {
           nombreParticipante: participantName,
@@ -57,8 +56,9 @@ const ReadExcelParticipants = () => {
           CursoName: CursoName,
           FechaInicio: FechaInicio,
           FechaFin: FechaFin,
-          Resolucion: Resolucion,
-          Creditos: CrediHoras,
+          Ponente: Ponente,
+          Temario: Temario,
+          HorasAcademicas: HorasAcademicas,
           estadoPago: estadoPago
         };
         participantes.push(participanteData);

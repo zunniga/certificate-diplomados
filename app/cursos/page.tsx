@@ -279,11 +279,9 @@ export default function Home() {
                   alt={`Generated Certificate ${currentImageIndex}`}
                 />
               ) : (
-                <img
-                  className="image-container w-3/4"
-                  src="../Images/cert-digital.png"
-                  alt="No Image Here"
-                />
+                <div className="text-center">
+                  No hay Diplomados para mostrar
+                </div>
               )}
               <button
                 className="ml-20 btn bg-cyan-600 text-white hover:bg-red-400"
