@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useImageUploader } from "@/Components/ImageUploaderDB";
@@ -68,7 +69,7 @@ export default function Home() {
 
             </Link>
 
-            <h1 className="text-4xl font-bold tracking-tight text-gray-500 sm:text-5xl md:text-6xl p-6 mb-8">
+            <h1 className="text-4xl font-bold tracking-tight text-slate-200 sm:text-5xl md:text-6xl p-6 mb-8">
                 <span className="block">
                     Modelo de diploma para modificar
                 </span>
@@ -87,7 +88,7 @@ export default function Home() {
 
                         <label className="form-control w-full max-w-xs">
                             <div className="label">
-                                <span className="label-text">Elige un archivo con las dimensiones: 1920x1080</span>
+                                <span className="label-text">Carga el reverso y anverso del diplomado</span>
                             </div>
                             <input
                                 className="file-input file-input-bordered w-full max-w-xs file-input-info"

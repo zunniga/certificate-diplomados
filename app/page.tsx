@@ -77,7 +77,7 @@ export default function Home({ }: HomeProps) {
         ))}
       </div>
       <Link href="/cursos" passHref legacyBehavior>
-        <button className={`btn btn-info  btn-lg mt-8 ${!isAnyCheckboxSelected ? "disabled:opacity-50 cursor-not-allowed" : ""}`} onClick={handleButtonClick} disabled={!isAnyCheckboxSelected}>
+        <button className={`btn bg-indigo-600 text-slate-200  btn-lg mt-8 ${!isAnyCheckboxSelected ? "disabled:opacity-50 cursor-not-allowed" : ""}`} onClick={handleButtonClick} disabled={!isAnyCheckboxSelected}>
           Ir a generar Diplomados
         </button>
       </Link>

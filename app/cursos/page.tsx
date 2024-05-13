@@ -141,11 +141,11 @@ export default function Home() {
             <Link href="/cursos/">Insercion de Participantes</Link>
           </li>
           <li className="step">
-            <Link href="/cursos/cert_phisyc/">Certificado físico</Link>
+            <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
           </li>
           <li className="step">
             <Link href="/cursos/cert_soloemp" passHref>
-              Certificado Digital (Solo Empresa)
+              Reverso del Diplomado
             </Link>
           </li>
           <li className="step">
