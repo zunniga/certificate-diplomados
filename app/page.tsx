@@ -46,7 +46,7 @@ export default function Home({ }: HomeProps) {
   return (
     <main className="relative flex flex-col items-center justify-center h-screen bg-slate-400">
       {/* Botón del icono en la esquina superior derecha */}
-      <Link href="/login" >
+      <Link href="/subirImages" >
         <div className="w-24 bg-cyan-600 h-12 text-center text-slate-200 flex justify-center items-center absolute top-0 left-0 m-9 cursor-pointer rounded-xl ">Modelo Actual</div>
       </Link>
       <h1 className="text-4xl font-bold tracking-tight text-indigo-600 sm:text-5xl md:text-6xl p-6 mb-8">
@@ -59,11 +59,11 @@ export default function Home({ }: HomeProps) {
         {[0, 1].map((index) => (
           <div key={index} className="flex items-center bg-gray-200 text-gray-800 font-semibold mr-4 p-4 rounded-xl">
             <div className="mr-2"> {/* Div para el texto indicativo */}
-              {index === 0 ? "Certificado Digital" : "Certificado Físico"}
+              {index === 0 ? "Diplomado (anverso)" : "Diplomado (reverso)"}
             </div>
             <div className="flex items-end">
               <input
-                className="checkbox checkbox-info checkbox-lg  mr-1"
+                className="checkbox bg-violet-600 checkbox-lg  mr-1"
                 type="checkbox"
                 onChange={() =>
                   handleCheckboxChange(
@@ -77,7 +77,11 @@ export default function Home({ }: HomeProps) {
         ))}
       </div>
       <Link href="/cursos" passHref legacyBehavior>
+<<<<<<< HEAD
         <button className={`btn bg-indigo-600 text-slate-200  btn-lg mt-8 ${!isAnyCheckboxSelected ? "disabled:opacity-50 cursor-not-allowed" : ""}`} onClick={handleButtonClick} disabled={!isAnyCheckboxSelected}>
+=======
+        <button className={`btn bg-indigo-600 text-slate-100  btn-lg mt-8 ${!isAnyCheckboxSelected ? "disabled:opacity-50 cursor-not-allowed" : ""}`} onClick={handleButtonClick} disabled={!isAnyCheckboxSelected}>
+>>>>>>> a23dc18a51769d71f0646a6fab698f7bc82dcc2e
           Ir a generar Diplomados
         </button>
       </Link>

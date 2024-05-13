@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 "use client"
+=======
+'use client';
+>>>>>>> a23dc18a51769d71f0646a6fab698f7bc82dcc2e
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useImageUploader } from "@/Components/ImageUploaderDB";
@@ -6,24 +10,15 @@ import { IoIosExit } from "react-icons/io";
 
 export default function Home() {
     const { guardarImagenes } = useImageUploader();
-    const [enabledInputs, setEnabledInputs] = useState<boolean[]>([true, true]); // Cambiado a true
-    const [files, setFiles] = useState<Array<File | null>>([null, null]);
+    const [enabledInputs, setEnabledInputs] = useState<boolean[]>([true, true, true]); // Cambiado a true
+    const [files, setFiles] = useState<Array<File | null>>([null, null, null]);
 
     useEffect(() => {
         // Verificar si el usuario está autenticado
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        if (!isLoggedIn) {
-            // Si el usuario no está autenticado, redirigirlo a la página de inicio de sesión
-            window.location.href = '/login';
-        }
+       
     }, []);
 
-    const handleLogout = () => {
-        // Eliminar la información de inicio de sesión del almacenamiento local
-        localStorage.removeItem('isLoggedIn');
-        // Redirigir al usuario a la página de inicio de sesión después de cerrar sesión
-        window.location.href = '/login';
-    };
+    
 
     const handleCheckboxChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const newEnabledInputs = [...enabledInputs];
@@ -49,6 +44,8 @@ export default function Home() {
                     nombre = 'imgCertiDigital';
                 } else if (index === 1) {
                     nombre = 'imgCertiPhisyc';
+                } else if (index === 2) {
+                    nombre = 'imgCertiOnly';
                 }
                 return { file, nombre };
             }
@@ -63,19 +60,21 @@ export default function Home() {
 
         <main className="bg-cyan-600 flex flex-col items-center justify-center h-screen">
             {/* Botón del icono en la esquina superior derecha */}
-            <Link href="/login" >
-                
-            <IoIosExit onClick={handleLogout} color="#ef4444" className="w-12 h-12 absolute top-0 right-0 m-4 cursor-pointer text-gray-500" size={24} />
+            <Link href="/" >
+
+            <IoIosExit color="#ef4444" className="w-12 h-12 absolute top-0 right-0 m-4 cursor-pointer text-gray-500" size={24} />
 
             </Link>
 
             <h1 className="text-4xl font-bold tracking-tight text-slate-200 sm:text-5xl md:text-6xl p-6 mb-8">
                 <span className="block">
-                    Modelo de diploma para modificar
+                    Modelo de diplomado para modificar
+
+
                 </span>
             </h1>
             <div className="flex flex-row">
-                {[0, 1].map((index) => (
+                {[0, 1, 2].map((index) => (
                     <div key={index} className="mr-10 flex">
                         <div className="flex items-end">
                             <input
