@@ -86,8 +86,8 @@ const CertificateGenerator = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
-      canvas.width = 2000; // Ancho de tu imagen
-      canvas.height = 1413; // Alto de tu imagen
+      canvas.width = 46770; // Ancho de tu imagen
+      canvas.height = 3307; // Alto de tu imagen
 
       const img = new Image();
       img.src = imageDataURL;  // Usar la imagen cargada por el usuario
@@ -143,7 +143,7 @@ const CertificateGenerator = () => {
 
           //TEXTO DE ORGANIZACION, FECHAS Y HORAS
           var tamanoFuente = 35; // Tamaño de fuente en píxeles
-          var textoCompleto = 'Curso oganizado por la Corporación ECOMÁS, llevado a cabo desde el ' + fechaInicioFormateada + ' hasta el ' + fechaFinFormateada + ' con una duración de ' + HorasAcademicas + ' horas académicas.';
+          var textoCompleto = 'Cursito oganizado por la Corporación ECOMÁS, llevado a cabo desde el ' + fechaInicioFormateada + ' hasta el ' + fechaFinFormateada + ' con una duración de ' + HorasAcademicas + ' horas académicas.';
           // Ancho máximo deseado para el texto
           var anchoMaximo = 700;
           // Función para dividir el texto en líneas según el ancho máximo

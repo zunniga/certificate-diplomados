@@ -144,11 +144,6 @@ export default function Home() {
             <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
           </li>
           <li className="step">
-            <Link href="/cursos/cert_soloemp" passHref>
-              Reverso del Diplomado
-            </Link>
-          </li>
-          <li className="step">
             <Link href="/" passHref>
               Exportar y enviar
             </Link>
@@ -193,19 +188,10 @@ export default function Home() {
                 </button>
                 {listaAbierta && (
                   <ul>
-                    <li>Estudio medio ambiental – derecho de vía – interferencias de Túneles.</li>
-                    <li>Diseño, construcción y mantenimiento de túneles </li>
-                    <li>Integración de proyectos de infraestructura vial.</li>
-                    <li>Tráfico y carga en proyectos viales.</li>
-                    <li>Topografía, diseño geométrico, señalización y seguridad vial</li>
-                    <li>opcion 6</li>
-                    <li>Geología – Geotecnia en obras viales.</li>
-                    <li>Mecánica de suelos en carreteras.</li>
-                    <li>Suelos y pavimentos en proyectos viales.</li>
-                    <li>Hidrología e hidráulica en proyectos viales.</li>
-                    <li>Estructuras en carreteras - puentes.</li>
-                    <li>Metrados, costos y presupuestos – cronograma.</li>
-                    <li>Arqueología en ingeniería vial </li>
+                    <li>Opción 1</li>
+                    <li>Opción 2</li>
+                    <li>Opción 3</li>
+                    {/* Puedes agregar más opciones aquí */}
                   </ul> 
                 )}
               </li>
@@ -279,9 +265,11 @@ export default function Home() {
                   alt={`Generated Certificate ${currentImageIndex}`}
                 />
               ) : (
-                <div className="text-center">
-                  No hay Diplomados para mostrar
-                </div>
+                <img
+                  className="image-container w-3/4"
+                  src="../Images/cert-digital.png"
+                  alt="No Image Here"
+                />
               )}
               <button
                 className="ml-20 btn bg-cyan-600 text-white hover:bg-red-400"
@@ -306,6 +294,7 @@ export default function Home() {
             <CertificateGenerator />
           </div>
         </dialog>
+
         <dialog id="excel_modal" className="modal" ref={excelModalRef}>
           <div className="modal-box">
             <div className="flex justify-between items-center">
@@ -322,3 +311,5 @@ export default function Home() {
     </div>
   );
 }
+
+

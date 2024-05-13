@@ -92,19 +92,15 @@ export default function Home() {
                     {/* Envuelve cada <li> en un componente <Link> */}
                     <li className="step step-info ">
                         <Link href="/cursos/" >
-                            Certificado Digital
+                        Insercion de Participantes
                         </Link>
                     </li>
                     <li className="step step-info">
                         <Link href="/cursos/cert_phisyc/" >
-                            Certificado físico
+                        Anverso del Diplomado
                         </Link>
                     </li>
-                    <li className="step step-info">
-                        <Link href="/cursos/cert_soloemp" passHref>
-                            Certificado Digital (Solo Empresa)
-                        </Link>
-                    </li>
+                    
                     <li className="step step-info">
                         <Link href="/cursos/cert_soloemp" passHref>
                             Exportar y enviar
@@ -126,7 +122,7 @@ export default function Home() {
                             </li>
                             <li>
                                 <div className="join grid grid-cols-2 mt-3">
-                                    <Link href="/cursos/cert_soloemp" passHref legacyBehavior>
+                                    <Link href="/cursos/cert_phisyc" passHref legacyBehavior>
                                         <button className="join-item btn-info btn text-white">Atrás</button>
                                     </Link>
                                     <Link href="/" passHref legacyBehavior>
@@ -138,18 +134,15 @@ export default function Home() {
                     </div>
                     <div className='overflow-x-auto h-96 mt-4 ml-3 rounded-lg '>
                         {/* Tabla para Certificados Digitales */}
-                        <h2 className="text-lg ">Certificados Digitales</h2>
+                        <h2 className="text-lg ">Diplomados - Anverso </h2>
                         <CertificatesTable certificates={digitalCertificates} />
                     </div>
                     <div className='overflow-x-auto h-96 mt-4 ml-3 rounded-lg '>
                         {/* Tabla para Certificados Físicos */}
-                        <h2 className="text-lg ">Certificados Físicos</h2>
+                        <h2 className="text-lg ">Diplomados - Reverso</h2>
                         <CertificatesTable certificates={physicalCertificates} />
                     </div>
-                    <div className='overflow-x-auto h-96 mt-4 ml-3 rounded-lg '>
-                        <h2 className="text-lg ">Certificados de Solo Empresa</h2>
-                        <CertificatesTable certificates={companyCertificates} />
-                    </div>
+                    
                 </div>
             </div>
         </div>

@@ -121,8 +121,8 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
-      canvas.width = 2000; // Ancho de tu imagen
-      canvas.height = 1413; // Alto de tu imagen
+      canvas.width = 4677; // Ancho de tu imagen
+      canvas.height = 3307; // Alto de tu imagen
 
       // Cargar la imagen en el lienzo
       const img = new Image();
@@ -157,7 +157,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
       var tamanoFuente = 35; // Tamaño de fuente en píxeles
-      var textoCompleto = 'Curso oganizado por la Corporación ECOMÁS, llevado a cabo desde el ' + participant.FechaInicio + ' hasta el ' + participant.FechaFin + ' con una duración de ' + participant.HorasAcademicas + ' horas académicas.';
+      var textoCompleto = 'Cursito oganizado por la Corporación ECOMÁS, llevado a cabo desde el ' + participant.FechaInicio + ' hasta el ' + participant.FechaFin + ' con una duración de ' + participant.HorasAcademicas + ' horas académicas.';
       // Ancho máximo deseado para el texto
       var anchoMaximo = 700;
       // Función para dividir el texto en líneas según el ancho máximo

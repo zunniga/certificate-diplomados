@@ -110,17 +110,12 @@ export default function Home() {
           {/* Envuelve cada <li> en un componente <Link> */}
           <li className="step step-info ">
             <Link href="/cursos/" >
-              Certificado Digital
+            Insercion de Participantes
             </Link>
           </li>
           <li className="step step-info">
             <Link href="/cursos/cert_phisyc/" >
-              Certificado físico
-            </Link>
-          </li>
-          <li className="step">
-            <Link href="/cursos/cert_soloemp" passHref>
-              Certificado Digital (Solo Empresa)
+            Anverso del Diplomado
             </Link>
           </li>
           <li className="step">
@@ -155,7 +150,7 @@ export default function Home() {
                   <Link href="/cursos/" passHref legacyBehavior>
                     <button className="join-item btn-info btn btn-outline">Atrás</button>
                   </Link>
-                  <Link href="/cursos/cert_soloemp" passHref legacyBehavior>
+                  <Link href="/cursos/cert_export" passHref legacyBehavior>
                     <button className="join-item btn-info text-white btn">Siguiente</button>
                   </Link>
                 </div>
