@@ -102,7 +102,7 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-black h-screen overflow-hidden">
+    <div className="bg-gray-500 h-screen overflow-hidden">
       {/* Encabezado fijo */}
       <header className="mt-8 text-center">
         <h1 className="mb-4 text-3xl">EMISIÓN DE DIPLOMADOS</h1>
@@ -126,32 +126,50 @@ export default function Home() {
         </ul>
       </header>
       {/* Sidebar */}
-      <div className="bg-black flex h-full">
+      <div className="bg-gray-500 flex h-full">
         {/* Contenedor Principal */}
         <div className=" flex w-full ">
           {/* Sidebar */}
-          <div className="w-1/3 p-4 bg-gray-800 text-white mt-4 h-full rounded-r-xl">
+          <div className="w-1/3 p-4  text-white mt-4 h-full rounded-r-xl">
             <ul>
               <li>
-                <button className="w-full btn bg-white text-black hover:bg-gray-200" onClick={openModal}>
+                <button className="w-full btn bg-sky-700 text-white hover:bg-gray-200" onClick={openModal}>
                   Agregar manualmente
                 </button>
               </li>
               <li>
-                <button className="w-full btn bg-white text-black hover:bg-gray-200 mt-2" onClick={openExcelModal}>
+                <button className="w-full btn bg-sky-700 text-white hover:bg-gray-200" onClick={openExcelModal}>
                   Insertar por Excel
                 </button>
               </li>
               <li>
                 <CertificateGeneratorExcel onCertificateGenerated={actualizarCertificados} onDeleteData={updateButton} />
               </li>
+              <li className="join grid grid-cols-2 mt-3 ">
+                <button
+                  onClick={goPrevious}
+                  className="btn bg-gray-800 text-white hover:bg-gray-600 mr-2"
+                >
+                  Anterior
+                </button>
+                <button
+                  onClick={goNext}
+                  className="btn bg-gray-800 text-white  hover:bg-gray-600 ml-2"
+                >
+                  Siguiente
+                </button>
+              </li>
               <li>
-                <div className="join grid grid-cols-2 mt-3">
+                <div className="join grid grid-cols-2 mt-3 ">
                   <Link href="/cursos/" passHref legacyBehavior>
-                    <button className="join-item btn-info btn btn-outline">Atrás</button>
+                    <button className="join-item bg-slate-200 btn btn-outline text-gray-900">
+                      Retroceder
+                    </button>
                   </Link>
                   <Link href="/cursos/cert_export" passHref legacyBehavior>
-                    <button className="join-item btn-info text-white btn">Siguiente</button>
+                    <button className="join-item bg-slate-200 text-gray-900 btn">
+                      Avanzar
+                    </button>
                   </Link>
                 </div>
               </li>
@@ -161,9 +179,7 @@ export default function Home() {
             {/* Contador de imágenes */}
             <div className="mb-4 text-white flex items-center justify-between">
               {/* Botón Anterior */}
-              <button onClick={goPrevious} className="btn bg-gray-800 text-white hover:bg-gray-600 mr-2">
-                Anterior
-              </button>
+             
               {/* Contador de imágenes */}
               <div className=" text-white flex items-center justify-between w-full">
                 <div className="join">
@@ -180,18 +196,14 @@ export default function Home() {
               </div>
 
               {/* Botón Siguiente */}
-              <button onClick={goNext} className="btn bg-gray-800 text-white  hover:bg-gray-600 ml-2">
-                Siguiente
-              </button>
+             
               {/* Botón Eliminar */}
-              <button className="ml-20 btn bg-red-500 text-white hover:bg-red-400" onClick={eliminarImagen}>
-                Eliminar Certificado
-              </button>
+             
             </div>
 
 
             {/* Imagen */}
-            <div className="carousel-container max-w-[88%] flex flex-col items-center"> {/* Ajustar max-w-lg según sea necesario */}
+            <div className="carousel-container max-w-[80%] flex flex-col items-center"> {/* Ajustar max-w-lg según sea necesario */}
               {generatedCertificates.length > 0 ? (
                 <ImageMagnifier
                   src={generatedCertificates[currentImageIndex]}
@@ -204,6 +216,9 @@ export default function Home() {
 
                 <img className="image-container w-3/4"  src="../Images/cert-digital.png" alt="No Image Here" />
               )}
+               <button className="ml-20 btn bg-blue-500 text-white hover:bg-red-400" onClick={eliminarImagen}>
+                Eliminar Certificado
+              </button>
             </div>
           </div>
         </div>

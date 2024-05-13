@@ -78,7 +78,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
 
       for (const participant of participants) {
         try {
-          if (participant.estadoPago === 'Pagado') {
+          if (participant.estadoPago === 'Aprobado') {
             console.log('Datos de las imágenes:', imageData); // Agrega este console.log para imprimir datos de las imágenes
             if (selectedCertificates.includes('certificadoDigital')) {
               const certificateDataURLDigital = await generateCertificate(participant, imageData.imgCertiDigital);
@@ -90,15 +90,14 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
               await imageDB.certificates.add({ certificateDataURL: certificateDataURLPhisyc, type: 'certificadoFisico', ownerName: participant.nombreParticipante }); // Agrega ownerName al certificado
               console.log(`Certificado físico generado para ${participant.nombreParticipante}`);
             }
-          } else if (participant.estadoPago === 'NoPagado' && selectedCertificates.includes('certificadoOnly')) {
-            const certificateDataURLOnly = await generateCertificate(participant, imageData.imgCertiOnly);
-            await imageDB.certificates.add({ certificateDataURL: certificateDataURLOnly, type: 'certificadoOnly', ownerName: participant.nombreParticipante }); // Agrega ownerName al certificado
-            console.log(`Certificado only generado para ${participant.nombreParticipante}`);
+          } else {
+            console.log(`El participante ${participant.nombreParticipante} no tiene el estado de pago aprobado. No se generará ningún certificado.`);
           }
         } catch (error) {
           console.error(`Error al generar el certificado para ${participant.nombreParticipante}:`, error);
         }
       }
+      
 
       alert("Certificados generados exitosamente para todos los participantes.");
       // Llamar a la función onCertificateGenerated al completar la generación de certificados
@@ -121,8 +120,8 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
-      canvas.width = 4677; // Ancho de tu imagen
-      canvas.height = 3307; // Alto de tu imagen
+      canvas.width = 1528; // Ancho de tu imagen
+      canvas.height = 1080; // Alto de tu imagen
 
       // Cargar la imagen en el lienzo
       const img = new Image();
@@ -137,29 +136,26 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       ctx.fillStyle = '#000000'; // Color del texto
       ctx.textBaseline = 'top';
 
-      ctx.textAlign = "center";
-      ctx.font = 'bold 50px  Arial';
-      ctx.fillText(participant.CursoName, 1300, 670);
+      //ctx.textAlign = "center";
+      //ctx.font = 'bold 50px  Arial';
+      //ctx.fillText(participant.CursoName, 1528, 670);
 
       ctx.textAlign = "center";
-      ctx.font = 'bold 65px Arial'; // 
-      ctx.fillText(participant.nombreParticipante, 1300, 540);
+      ctx.font = 'bold 50px Arial'; // 
+      ctx.fillText(participant.nombreParticipante, 950, 460);
+
+      
 
       ctx.textAlign = "center";
-      ctx.fillStyle = "white";
-      ctx.font = 'bold 25px Arial'; // 
-      ctx.fillText(participant.Ponente, 300, 370);
-
-      ctx.textAlign = "center";
-      ctx.fillStyle = "white";
+      ctx.fillStyle = "black ";
       ctx.font = 'bold 30px Arial  ';
-      ctx.fillText(participant.codigoParticipante, 308, 1198);
+      ctx.fillText(participant.codigoParticipante, 225, 925);
 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
       var tamanoFuente = 35; // Tamaño de fuente en píxeles
-      var textoCompleto = 'Cursito oganizado por la Corporación ECOMÁS, llevado a cabo desde el ' + participant.FechaInicio + ' hasta el ' + participant.FechaFin + ' con una duración de ' + participant.HorasAcademicas + ' horas académicas.';
+      var textoCompleto = 'Lorem impusm' + participant.FechaInicio + ' Lorem Ipsum ' + participant.FechaFin + ' Lorem ipsun ' + participant.HorasAcademicas + ' Lorem impusn';
       // Ancho máximo deseado para el texto
-      var anchoMaximo = 700;
+      var anchoMaximo = 900;
       // Función para dividir el texto en líneas según el ancho máximo
       function dividirTextoEnLineas(texto, anchoMaximo) {
         var palabras = texto.split(' ');
@@ -181,52 +177,26 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
 
       // Obtener las líneas divididas
       var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
-      var y = 800;
+      var y = 530;
       // Dibujar cada línea en el canvas
       for (var i = 0; i < lineas.length; i++) {
         ctx.textAlign = "center";
-        ctx.font = '40px Arial bold'; // 
+        ctx.font = '30px sans-serif';
         ctx.fillStyle = "black";
 
-        ctx.fillText(lineas[i], 1300, y);
+        ctx.fillText(lineas[i], 970, y);
         y += tamanoFuente + 5; // Espacio vertical entre líneas
       }
       //TEMARIO -----------------------------------------------------------------------
       // Ancho máximo permitido para el texto
       var anchoMaximo = 400;
 
-      ctx.fillStyle = "white";
-      ctx.textAlign = "left";
-      ctx.font = '25px bold Arial';
-      var palabras = participant.Temario.split("\n");
+     
 
       var x = 110; // Posición x inicial
       var y = 489; // Posición y inicial
 
-      palabras.forEach(function (palabra, index) {
-        if (index !== 0) { // Evita dibujar la primera palabra
-          // Dividir la línea en palabras
-          var palabrasLinea = palabra.split(' ');
-          var lineaActual = '';
-          palabrasLinea.forEach(function (palabra, index) {
-            // Medir el ancho de la línea actual con la palabra actual agregada
-            var anchoLinea = ctx.measureText(lineaActual + palabra).width;
-            // Si la línea actual excede el ancho máximo permitido, dibujar la línea actual y pasar a la siguiente línea
-            if (anchoLinea > anchoMaximo) {
-              ctx.fillText(lineaActual, x, y);
-              y += 40; // Incrementar la posición y para el salto de línea
-              // Reiniciar la línea actual con la palabra actual
-              lineaActual = palabra + ' ';
-            } else {
-              // Agregar la palabra actual a la línea actual
-              lineaActual += palabra + ' ';
-            }
-          });
-          // Dibujar la última línea actual
-          ctx.fillText(lineaActual, x, y);
-          y += 40; // Incrementar la posición y para el salto de línea
-        }
-      });
+      
 
       // Generar el certificado como una imagen
       const certificateDataURL = canvas.toDataURL('image/jpeg');
@@ -234,7 +204,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       return certificateDataURL; // Devolver la URL de la imagen del certificado
     } else {
       // Si falta algún campo, lanzar un error
-      throw new Error('Faltan campos necesarios para generar el certificado.');
+      throw new Error('Faltan campos necesarios para generar el diplomado.');
     }
   };
 

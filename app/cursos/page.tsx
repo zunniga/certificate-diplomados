@@ -215,12 +215,12 @@ export default function Home() {
                 <div className="join grid grid-cols-2 mt-3 ">
                   <Link href="/" passHref legacyBehavior>
                     <button className="join-item bg-slate-200 btn btn-outline text-gray-900">
-                      Button
+                      Retroceder
                     </button>
                   </Link>
                   <Link href="/cursos/cert_phisyc" passHref legacyBehavior>
                     <button className="join-item bg-slate-200 text-gray-900 btn">
-                      Button
+                      Avanzar
                     </button>
                   </Link>
                 </div>
@@ -265,11 +265,8 @@ export default function Home() {
                   alt={`Generated Certificate ${currentImageIndex}`}
                 />
               ) : (
-                <img
-                  className="image-container w-3/4"
-                  src="../Images/cert-digital.png"
-                  alt="No Image Here"
-                />
+                <div>Genera tus Diplomados</div>
+
               )}
               <button
                 className="ml-20 btn bg-cyan-600 text-white hover:bg-red-400"
@@ -281,6 +278,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+     
       <div>
         <dialog id="my_modal_1" className="modal" ref={modalRef}>
           <div className="modal-box">
