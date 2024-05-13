@@ -59,11 +59,11 @@ export default function Home({ }: HomeProps) {
         {[0, 1].map((index) => (
           <div key={index} className="flex items-center bg-gray-200 text-gray-800 font-semibold mr-4 p-4 rounded-xl">
             <div className="mr-2"> {/* Div para el texto indicativo */}
-              {index === 0 ? "Certificado Digital" : "Certificado Físico"}
+              {index === 0 ? "Modelo Cargado correctamente(anverso)" : "Modelo Cargado Correctamente(reverso)"}
             </div>
             <div className="flex items-end">
               <input
-                className="checkbox checkbox-info checkbox-lg  mr-1"
+                className="checkbox checkbox-accent checkbox-lg  mr-1"
                 type="checkbox"
                 onChange={() =>
                   handleCheckboxChange(

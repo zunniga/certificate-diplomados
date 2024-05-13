@@ -75,7 +75,7 @@ export default function Home() {
                     <div key={index} className="mr-10 flex">
                         <div className="flex items-end">
                             <input
-                                className="checkbox checkbox-info checkbox-lg mb-2 mr-1"
+                                className="checkbox bg-green-500 checkbox-lg mb-2 mr-1"
                                 type="checkbox"
                                 checked={enabledInputs[index]}
                                 onChange={handleCheckboxChange(index)}
@@ -83,18 +83,18 @@ export default function Home() {
                         </div>
 
                         <label className="form-control w-full max-w-xs">
-                            <div className="label">
-                                <span className="label-text">Carga el reverso y anverso del diplomado</span>
+                            <div className="label bg-black rounded-xl">
+                                <span className="label-text text-gray-100">Carga el reverso y anverso del diplomado</span>
                             </div>
                             <input
-                                className="file-input file-input-bordered w-full max-w-xs file-input-info"
+                                className=" bg-slate-500 file-input-bordered w-full max-w-xs"
                                 type="file"
                                 onChange={handleFileChange(index)}
                                 accept="image/*"
                                 disabled={!enabledInputs[index]}
                             />
                             {files[index] && (
-                                <img src={URL.createObjectURL(files[index])} alt={`Preview ${index}`} className="w-max" />
+                                <img src={URL.createObjectURL(files[index])} alt={`Preview ${index}`} className="w-max " />
                             )}
                         </label>
 
@@ -103,7 +103,7 @@ export default function Home() {
             </div>
             <Link href="/" passHref legacyBehavior>
                 <button
-                    className={`btn btn-info btn-lg mt-8  ${!isGuardarButtonEnabled ? 'cursor-not-allowed opacity-90' : ''}`}
+                    className={`btn bg-indigo-600 btn-lg mt-8  ${!isGuardarButtonEnabled ? 'cursor-not-allowed opacity-90' : ''}`}
                     onClick={handleGuardarImagenes}
                     disabled={!isGuardarButtonEnabled}
                 >

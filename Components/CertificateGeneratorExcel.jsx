@@ -153,7 +153,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
       var tamanoFuente = 35; // Tamaño de fuente en píxeles
-      var textoCompleto = 'Lorem impusm' + participant.FechaInicio + ' Lorem Ipsum ' + participant.FechaFin + ' Lorem ipsun ' + participant.HorasAcademicas + ' Lorem impusn';
+      var textoCompleto = 'Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución   ' + participant.FechaFin + ' Lorem ipsun ' + participant.HorasAcademicas + ' Lorem impusn';
       // Ancho máximo deseado para el texto
       var anchoMaximo = 900;
       // Función para dividir el texto en líneas según el ancho máximo
