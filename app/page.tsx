@@ -46,7 +46,7 @@ export default function Home({ }: HomeProps) {
   return (
     <main className="relative flex flex-col items-center justify-center h-screen bg-slate-400">
       {/* Botón del icono en la esquina superior derecha */}
-      <Link href="/login" >
+      <Link href="/subirImages" >
         <div className="w-24 bg-cyan-600 h-12 text-center text-slate-200 flex justify-center items-center absolute top-0 left-0 m-9 cursor-pointer rounded-xl ">Modelo Actual</div>
       </Link>
       <h1 className="text-4xl font-bold tracking-tight text-indigo-600 sm:text-5xl md:text-6xl p-6 mb-8">

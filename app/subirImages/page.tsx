@@ -11,18 +11,14 @@ export default function Home() {
 
     useEffect(() => {
         // Verificar si el usuario está autenticado
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        if (!isLoggedIn) {
-            // Si el usuario no está autenticado, redirigirlo a la página de inicio de sesión
-            window.location.href = '/login';
-        }
+       
     }, []);
 
     const handleLogout = () => {
         // Eliminar la información de inicio de sesión del almacenamiento local
         localStorage.removeItem('isLoggedIn');
         // Redirigir al usuario a la página de inicio de sesión después de cerrar sesión
-        window.location.href = '/login';
+        window.location.href = '/';
     };
 
     const handleCheckboxChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +59,7 @@ export default function Home() {
 
         <main className="bg-cyan-600 flex flex-col items-center justify-center h-screen">
             {/* Botón del icono en la esquina superior derecha */}
-            <Link href="/login" >
+            <Link href="/" >
                 
             <IoIosExit onClick={handleLogout} color="#ef4444" className="w-12 h-12 absolute top-0 right-0 m-4 cursor-pointer text-gray-500" size={24} />
 

@@ -253,7 +253,7 @@ export default function Home() {
             </div>
 
             {/* Imagen */}
-            <div className="carousel-container max-w-[88%] flex flex-col items-center mb-14">
+            <div className="carousel-container max-w-[80%] flex flex-col items-center mb-14" >
               {" "}
               {/* Ajustar max-w-lg según sea necesario */}
               {generatedCertificates.length > 0 ? (
