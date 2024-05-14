@@ -120,8 +120,8 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
-      canvas.width = 1528; // Ancho de tu imagen
-      canvas.height = 1080; // Alto de tu imagen
+      canvas.width = 4677; // Ancho de tu imagen
+      canvas.height = 3307; // Alto de tu imagen
 
       // Cargar la imagen en el lienzo
       const img = new Image();
@@ -141,21 +141,22 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       //ctx.fillText(participant.CursoName, 1528, 670);
 
       ctx.textAlign = "center";
-      ctx.font = 'bold 50px Arial'; // 
-      ctx.fillText(participant.nombreParticipante, 950, 460);
+      ctx.font = 'bold 140px Century Gothic'; // 
+      ctx.fillText(participant.nombreParticipante, 2850, 1410);
 
       
 
       ctx.textAlign = "center";
       ctx.fillStyle = "black ";
-      ctx.font = 'bold 30px Arial  ';
-      ctx.fillText(participant.codigoParticipante, 225, 925);
+      ctx.font = 'bold 55px Century Gothic  ';
+      ctx.fillText(participant.codigoParticipante, 685, 2875);
 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
-      var tamanoFuente = 35; // Tamaño de fuente en píxeles
-      var textoCompleto = 'Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución   ' + participant.FechaFin + ' Lorem ipsun ' + participant.HorasAcademicas + ' Lorem impusn';
+      var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
       // Ancho máximo deseado para el texto
-      var anchoMaximo = 900;
+      var textoCompleto = 'Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución directoral virtual Nro 024-2023 EPG-UNP , llevado a cabo del '
+       + participant.FechaInicio + ' al ' + participant.FechaFin + ' con una duracion de 420 hrs académicas, equivalente a ' + participant.HorasAcademicas + ', de conformidad con la ley Universitaria vigente.'
+      var anchoMaximo = 2200;
       // Función para dividir el texto en líneas según el ancho máximo
       function dividirTextoEnLineas(texto, anchoMaximo) {
         var palabras = texto.split(' ');
@@ -177,24 +178,25 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
 
       // Obtener las líneas divididas
       var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
-      var y = 530;
+      var y = 1730;
+    
       // Dibujar cada línea en el canvas
       for (var i = 0; i < lineas.length; i++) {
         ctx.textAlign = "center";
-        ctx.font = '30px sans-serif';
+        ctx.font = '65px Century Gothic  ';
         ctx.fillStyle = "black";
 
-        ctx.fillText(lineas[i], 970, y);
-        y += tamanoFuente + 5; // Espacio vertical entre líneas
+        ctx.fillText(lineas[i], 2830, y);
+        y += tamanoFuente + 75; // Espacio vertical entre líneas
       }
       //TEMARIO -----------------------------------------------------------------------
       // Ancho máximo permitido para el texto
-      var anchoMaximo = 400;
+      var anchoMaximo = 500;
 
      
 
       var x = 110; // Posición x inicial
-      var y = 489; // Posición y inicial
+      var y = 989; // Posición y inicial
 
       
 
