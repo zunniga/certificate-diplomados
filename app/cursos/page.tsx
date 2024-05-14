@@ -145,7 +145,7 @@ export default function Home() {
           </li>
           <li className="step">
             <Link href="/" passHref>
-              Exportar y enviar
+              Exportar en PDF
             </Link>
           </li>
         </ul>

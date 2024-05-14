@@ -127,7 +127,7 @@ export default function Home() {
 
           <li className="step step-info">
             <Link href="/cursos/cert_soloemp" passHref>
-              Exportar y enviar
+            Exportar en PDF
             </Link>
           </li>
         </ul>
