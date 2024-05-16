@@ -54,7 +54,7 @@ export default function Home({ }: HomeProps) {
           EMISION DE DIPLOMADOS
         </span>
       </h1>
-      <h2 className="text-xl mb-4">Por favor seleccione qué tipo de certificados se va a generar: </h2>
+      <h2 className="text-xl mb-4">Suba los modelos con los que desee trabajar: </h2>
       <div className="flex flex-row">
         {[0, 1].map((index) => (
           <div key={index} className="flex items-center bg-gray-200 text-gray-800 font-semibold mr-4 p-4 rounded-xl">

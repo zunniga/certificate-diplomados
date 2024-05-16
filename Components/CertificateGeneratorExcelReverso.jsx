@@ -86,7 +86,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
               console.log(`Certificado digital generado para ${participant.nombreParticipante}`);
             }
             if (selectedCertificates.includes('certificadoFisico')) {
-              const certificateDataURLPhisyc = await generateCertificateReverso(participant, imageData.imgCertiPhisyc);
+              const certificateDataURLPhisyc = await generateCertificate(participant, imageData.imgCertiPhisyc);
               await imageDB.certificates.add({ certificateDataURL: certificateDataURLPhisyc, type: 'certificadoFisico', ownerName: participant.nombreParticipante }); // Agrega ownerName al certificado
               console.log(`Certificado físico generado para ${participant.nombreParticipante}`);
             }
@@ -111,8 +111,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       setGeneratingCertificates(false);
     }
   };
-  
-   // IMAGEN DE ANVERSO       
+
   const generateCertificate = async (participant, imageDataURL) => {
     // Verificar si todos los campos necesarios están disponibles
     if (imageDataURL) {
@@ -155,106 +154,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
       var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
       // Ancho máximo deseado para el texto
-      var textoCompleto = 'dATAPor haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución directoral virtual Nro 024-2023 EPG-UNP , llevado a cabo del '
-       + participant.FechaInicio + ' al ' + participant.FechaFin + ' con una duracion de 420 hrs académicas, equivalente a ' + participant.HorasAcademicas + ', de conformidad con la ley Universitaria vigente.'
-      var anchoMaximo = 2200;
-      // Función para dividir el texto en líneas según el ancho máximo
-      function dividirTextoEnLineas(texto, anchoMaximo) {
-        var palabras = texto.split(' ');
-        var lineas = [];
-        var lineaActual = palabras[0];
-        for (var i = 1; i < palabras.length; i++) {
-          var palabra = palabras[i];
-          var medida = ctx.measureText(lineaActual + ' ' + palabra);
-          if (medida.width < anchoMaximo) {
-            lineaActual += ' ' + palabra;
-          } else {
-            lineas.push(lineaActual);
-            lineaActual = palabra;
-          }
-        }
-        lineas.push(lineaActual);
-        return lineas;
-      }
-
-      // Obtener las líneas divididas
-      var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
-      var y = 1730;
-    
-      // Dibujar cada línea en el canvas
-      for (var i = 0; i < lineas.length; i++) {
-        ctx.textAlign = "center";
-        ctx.font = '65px Century Gothic  ';
-        ctx.fillStyle = "black";
-
-        ctx.fillText(lineas[i], 2830, y);
-        y += tamanoFuente + 75; // Espacio vertical entre líneas
-      }
-      //TEMARIO -----------------------------------------------------------------------
-      // Ancho máximo permitido para el texto
-      var anchoMaximo = 500;
-
-     
-
-      var x = 110; // Posición x inicial
-      var y = 989; // Posición y inicial
-
-      
-
-      // Generar el certificado como una imagen
-      const certificateDataURL = canvas.toDataURL('image/jpeg');
-
-      return certificateDataURL; // Devolver la URL de la imagen del certificado
-    } else {
-      // Si falta algún campo, lanzar un error
-      throw new Error('Faltan campos necesarios para generar el diplomado.');
-    }
-  };
-   
-  // IMAGEN DE REVERSO
-  const generateCertificateReverso = async (participant, imageDataURL) => {
-    // Verificar si todos los campos necesarios están disponibles
-    if (imageDataURL) {
-
-      // Crear un lienzo
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-
-      canvas.width = 4677; // Ancho de tu imagen
-      canvas.height = 3307; // Alto de tu imagen
-
-      // Cargar la imagen en el lienzo
-      const img = new Image();
-      img.src = imageDataURL;
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-      });
-      ctx.textAlign = 'justify';
-      ctx.drawImage(img, 0, 0);
-
-      ctx.fillStyle = '#000000'; // Color del texto
-      ctx.textBaseline = 'top';
-
-      //ctx.textAlign = "center";
-      //ctx.font = 'bold 50px  Arial';
-      //ctx.fillText(participant.CursoName, 1528, 670);
-
-      ctx.textAlign = "center";
-      ctx.font = 'bold 140px Century Gothic'; // 
-      ctx.fillText(participant.nombreParticipante, 2850, 1410);
-
-      
-
-      ctx.textAlign = "center";
-      ctx.fillStyle = "black ";
-      ctx.font = 'bold 55px Century Gothic  ';
-      ctx.fillText(participant.codigoParticipante, 685, 2875);
-
-      //TEXTO DE ORGANIZACION, FECHAS Y HORAS
-      var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
-      // Ancho máximo deseado para el texto
-      var textoCompleto = 'JEYYPor haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución directoral virtual Nro 024-2023 EPG-UNP , llevado a cabo del '
+      var textoCompleto = 'Reverso Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución directoral virtual Nro 024-2023 EPG-UNP , llevado a cabo del '
        + participant.FechaInicio + ' al ' + participant.FechaFin + ' con una duracion de 420 hrs académicas, equivalente a ' + participant.HorasAcademicas + ', de conformidad con la ley Universitaria vigente.'
       var anchoMaximo = 2200;
       // Función para dividir el texto en líneas según el ancho máximo

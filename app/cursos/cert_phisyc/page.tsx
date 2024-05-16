@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useRef, useState, useEffect } from "react";
 import ReadExcelParticipants from "@/Components/ReadExcelParticipants";
 import CertificateGeneratorExcel from "@/Components/CertificateGeneratorExcel";
@@ -16,9 +16,7 @@ export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const modalRef = useRef<HTMLDialogElement>(null);
   const excelModalRef = useRef<HTMLDialogElement>(null);
-  const [generatedCertificates, setGeneratedCertificates] = useState<string[]>(
-    []
-  );
+  const [generatedCertificates, setGeneratedCertificates] = useState<string[]>([]);
 
   useEffect(() => {
     const obtenerCertificados = async () => {
@@ -131,7 +129,7 @@ export default function Home() {
           </li>
           <li className="step">
             <Link href="/cursos/cert_soloemp" passHref>
-            Exportar en PDF
+              Exportar en PDF
             </Link>
           </li>
         </ul>
@@ -207,9 +205,7 @@ export default function Home() {
                     <button
                       key={index}
                       className={`join-item btn ${
-                        index === currentImageIndex
-                          ? "btn-info  text-white"
-                          : ""
+                        index === currentImageIndex ? "btn-info  text-white" : ""
                       }`}
                       onClick={() => setCurrentImageIndex(index)}
                     >
@@ -233,11 +229,7 @@ export default function Home() {
                   alt={`Generated Certificate ${currentImageIndex}`}
                 />
               ) : (
-                <img
-                  className="image-container w-3/4"
-                  src="../Images/cert-digital.png"
-                  alt="No Image Here"
-                />
+                <div>Carga correctamente los modelos de diplmados</div>
               )}
               <button
                 className="ml-20 btn bg-blue-500 text-white hover:bg-red-400"
@@ -246,7 +238,6 @@ export default function Home() {
                 Eliminar Certificado
               </button>
             </div>
-            
           </div>
         </div>
       </div>
