@@ -155,9 +155,9 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
       var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
       // Ancho máximo deseado para el texto
-      var textoCompleto = 'dATAPor haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución directoral virtual Nro 024-2023 EPG-UNP , llevado a cabo del '
+      var textoCompleto = 'Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución directoral virtual Nro 024-2023 EPG-UNP , llevado a cabo del '
        + participant.FechaInicio + ' al ' + participant.FechaFin + ' con una duracion de 420 hrs académicas, equivalente a ' + participant.HorasAcademicas + ', de conformidad con la ley Universitaria vigente.'
-      var anchoMaximo = 2200;
+      var anchoMaximo = 2400;
       // Función para dividir el texto en líneas según el ancho máximo
       function dividirTextoEnLineas(texto, anchoMaximo) {
         var palabras = texto.split(' ');

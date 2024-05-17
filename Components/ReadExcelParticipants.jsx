@@ -8,7 +8,7 @@ class ParticipantDatabase extends Dexie {
   constructor() {
     super("ParticipantDatabase");
     this.version(1).stores({
-      participants: "++id, nombreParticipante, codigoParticipante, CursoName, FechaInicio, FechaFin, HorasAcademicas, estadoPago",
+      participants: "++id, nombreParticipante, codigoParticipante, CursoName, FechaInicio,Modulos , Resolucion, NotaParcial, NotaFinal, Promedio, FechaFin, HorasAcademicas, estadoPago",
     });
     this.participants = this.table("participants");
   }
@@ -39,14 +39,21 @@ const ReadExcelParticipants = () => {
       const CursoName = ws['C1'] ? ws['C1'].v : '';
       const FechaInicio = ws['C2'] ? ws['C2'].v : '';
       const FechaFin = ws['C3'] ? ws['C3'].v : '';
+      const Modulos = ws['C4'] ? ws['C4'].v : '';
+      const ResoDirectoral = ws['C5'] ? ws['C5'].v : '';
       const HorasAcademicas = ws['C6'] ? ws['C6'].v : '';
+     
 
       const participantes = [];
       let rowIndex = 13;
       while (ws['B' + rowIndex]) {
         const participantName = ws['B' + rowIndex].v;
         const codigoParticipante = ws['P' + rowIndex].v;
+        const NotaParcial = ws['M' + rowIndex].v;
+        const NotaFinal = ws['N' + rowIndex].v;
+        const Promedio = ws['O' + rowIndex].v;
         const estadoPago = ws['S' + rowIndex] ? ws['S' + rowIndex].v : '';
+        
 
         const participanteData = {
           nombreParticipante: participantName,
@@ -55,6 +62,11 @@ const ReadExcelParticipants = () => {
           FechaInicio: FechaInicio,
           FechaFin: FechaFin,
           HorasAcademicas: HorasAcademicas,
+          Modulos: Modulos,
+          Resolucion: ResoDirectoral,
+          NotaParcial: NotaParcial,
+          NotaFinal: NotaFinal,
+          Promedio: Promedio,
           estadoPago: estadoPago
         };
         participantes.push(participanteData);
