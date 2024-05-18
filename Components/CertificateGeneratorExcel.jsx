@@ -152,11 +152,16 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       ctx.font = 'bold 55px Century Gothic  ';
       ctx.fillText(participant.codigoParticipante, 685, 2875);
 
+
+
+
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
       var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
       // Ancho máximo deseado para el texto
-      var textoCompleto = 'Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la resolución directoral virtual Nro 024-2023 EPG-UNP , llevado a cabo del '
-       + participant.FechaInicio + ' al ' + participant.FechaFin + ' con una duracion de 420 hrs académicas, equivalente a ' + participant.HorasAcademicas + ', de conformidad con la ley Universitaria vigente.'
+    // Modificar el texto completo para poner en negrita solo la parte relacionada con participant.CursoName
+var textoCompleto = 'Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la ' + participant.Resolucion +' , llevado a cabo del '
++ participant.FechaInicio + ' al ' + participant.FechaFin + ' con una duracion de 420 hrs académicas, equivalente a ' + participant.HorasAcademicas + ', de conformidad con la ley Universitaria vigente.';
+
       var anchoMaximo = 2400;
       // Función para dividir el texto en líneas según el ancho máximo
       function dividirTextoEnLineas(texto, anchoMaximo) {
@@ -184,12 +189,30 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       // Dibujar cada línea en el canvas
       for (var i = 0; i < lineas.length; i++) {
         ctx.textAlign = "center";
-        ctx.font = '65px Century Gothic  ';
         ctx.fillStyle = "black";
-
+    
+        // Establecer el estilo de fuente predeterminado
+        var font = '65px Century Gothic';
+    
+        // Verificar si la línea actual incluye la parte relacionada con participant.CursoName
+        if (lineas[i].includes(participant.Resolucion)) {
+            // Aplicar negrita a la parte relacionada con participant.CursoName
+            font = 'bold ' + font; // Agregar negrita al estilo de fuente
+        }
+    
+        // Establecer el estilo de fuente antes de dibujar la línea
+        ctx.font = font;
+    
+        // Dibujar la línea en el lienzo
         ctx.fillText(lineas[i], 2830, y);
+    
+        // Incrementar la posición y para la siguiente línea
         y += tamanoFuente + 75; // Espacio vertical entre líneas
-      }
+    }
+
+
+
+
       //TEMARIO -----------------------------------------------------------------------
       // Ancho máximo permitido para el texto
       var anchoMaximo = 500;
@@ -211,6 +234,10 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
     }
   };
    
+
+
+
+  
   // IMAGEN DE REVERSO
   const generateCertificateReverso = async (participant, imageDataURL) => {
     // Verificar si todos los campos necesarios están disponibles
