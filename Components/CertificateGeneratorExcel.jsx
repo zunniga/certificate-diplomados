@@ -158,7 +158,7 @@ const CertificateGeneratorExcel = ({ onCertificateGenerated, onDeleteData }) => 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
       var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
       // Ancho máximo deseado para el texto
-      var textoCompleto = 'Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la ' + participant.Resolucion + ' , llevado a cabo del ' + participant.FechaInicio + ' al ' + participant.FechaFin + ' con una duracion de 420 hrs académicas, equivalente a ' + participant.HorasAcademicas + ', de conformidad con la ley Universitaria vigente.';
+      var textoCompleto = 'Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN ' + participant.CursoName + ' en su calidad de ASISTENTE, aprobado mediante la ' + participant.Resolucion + ' , llevado a cabo del ' + participant.FechaInicio + ' al ' + participant.FechaFin + ' con una duracion de 420 hrs académicas, equivalente a ' + participant.HorasAcademicas + ', de conformidad con la ley Universitaria vigente.' ;
 
 var anchoMaximo = 2400;
 
@@ -210,7 +210,7 @@ for (var i = 0; i < lineas.length; i++) {
   });
 
   // Incrementar la posición y para la siguiente línea
-  y += 65 + 55; // Espacio vertical entre líneas (tamaño de fuente + 50)
+  y += 55 + 55; // Espacio vertical entre líneas (tamaño de fuente + 50)
 }
 
       
