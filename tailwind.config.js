@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'sans': ['Century Gothic', 'sans-serif'],
+        'futura-bkbt': ['Futura Bk BT', 'sans-serif'], // Agrega tu nueva fuente aquí
       },
     },
   },

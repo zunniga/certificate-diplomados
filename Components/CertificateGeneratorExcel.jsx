@@ -206,12 +206,11 @@ const CertificateGeneratorExcel = ({
       ctx.font = " 65px Century Gothic"; //
       ctx.fillText(texto, 3650, 2480);
 
-
-//------------------------------------------------------------------------------------------------------------------
+      //------------------------------------------------------------------------------------------------------------------
       ctx.textAlign = "center";
       ctx.fillStyle = "black ";
       ctx.font = "bold 55px Century Gothic  ";
-      ctx.fillText(participant.codigoParticipante, 685, 2875);
+      ctx.fillText(participant.codigoParticipante, 700, 2875);
 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
       var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
@@ -287,8 +286,13 @@ const CertificateGeneratorExcel = ({
               ? "bold 65px Century Gothic"
               : "65px Century Gothic";
           ctx.font = font;
-          ctx.fillText(parte, x, y);
-          x += ctx.measureText(parte).width; // Incrementar la posición x para la siguiente parte
+
+          // Si la parte es el CursoName, convertir a mayúsculas
+          var textToDraw =
+            parte === participant.CursoName ? parte.toUpperCase() : parte;
+
+          ctx.fillText(textToDraw, x, y);
+          x += ctx.measureText(textToDraw).width; // Incrementar la posición x para la siguiente parte
         });
 
         // Incrementar la posición y para la siguiente línea
@@ -341,62 +345,77 @@ const CertificateGeneratorExcel = ({
       //ctx.fillText(participant.CursoName, 1528, 670);
 
       ctx.textAlign = "center";
-      ctx.font = "bold 140px Century Gothic"; //
-      ctx.fillText(participant.nombreParticipante, 2850, 1410);
+      ctx.font = " 80px Futura Bk BT ";
+      ctx.fillText(participant.CursoName, 3150, 1450);
+
+
+
+      ctx.textAlign = "center";
+      ctx.font = "bold 80px Futura Bk BT ";
+      ctx.fillText(participant.NotaParcial, 4220, 1830);
+
+
+      ctx.textAlign = "center";
+      ctx.font = "bold 80px Futura Bk BT ";
+      ctx.fillText(participant.NotaFinal, 4220, 2150);
+
+
+
+      ctx.textAlign = "center";
+      ctx.font = "bold 80px Futura Bk BT ";
+      ctx.fillText(participant.Promedio, 4190, 2980);
+
+
+
 
       ctx.textAlign = "center";
       ctx.fillStyle = "black ";
-      ctx.font = "bold 55px Century Gothic  ";
-      ctx.fillText(participant.codigoParticipante, 685, 2875);
+      ctx.font = " 100px Futura Bk BT ";
+      ctx.fillText(participant.codigoParticipante, 1185, 2770);
 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
-      var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
-      // Ancho máximo deseado para el texto
-      var textoCompleto =
-        "JEYYPor haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN " +
-        participant.CursoName +
-        " en su calidad de ASISTENTE, aprobado mediante la resolución directoral virtual Nro 024-2023 EPG-UNP , llevado a cabo del " +
-        participant.FechaInicio +
-        " al " +
-        participant.FechaFin +
-        " con una duracion de 420 hrs académicas, equivalente a " +
-        participant.HorasAcademicas +
-        ", de conformidad con la ley Universitaria vigente.";
-      var anchoMaximo = 2200;
-      // Función para dividir el texto en líneas según el ancho máximo
-      function dividirTextoEnLineas(texto, anchoMaximo) {
-        var palabras = texto.split(" ");
-        var lineas = [];
-        var lineaActual = palabras[0];
-        for (var i = 1; i < palabras.length; i++) {
-          var palabra = palabras[i];
-          var medida = ctx.measureText(lineaActual + " " + palabra);
-          if (medida.width < anchoMaximo) {
-            lineaActual += " " + palabra;
-          } else {
-            lineas.push(lineaActual);
-            lineaActual = palabra;
-          }
-        }
-        lineas.push(lineaActual);
-        return lineas;
-      }
-
-      // Obtener las líneas divididas
-      var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
-      var y = 1730;
-
-      // Dibujar cada línea en el canvas
-      for (var i = 0; i < lineas.length; i++) {
-        ctx.textAlign = "center";
-        ctx.font = "65px Century Gothic  ";
-        ctx.fillStyle = "black";
-
-        ctx.fillText(lineas[i], 2830, y);
-        y += tamanoFuente + 75; // Espacio vertical entre líneas
-      }
+       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
+       var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
+       // Ancho máximo deseado para el texto
+       var textoCompleto =
+        participant.Modulos 
+       var anchoMaximo = 2200;
+       // Función para dividir el texto en líneas según el ancho máximo
+       function dividirTextoEnLineas(texto, anchoMaximo) {
+         var palabras = texto.split(" ");
+         var lineas = [];
+         var lineaActual = palabras[0];
+         for (var i = 1; i < palabras.length; i++) {
+           var palabra = palabras[i];
+           var medida = ctx.measureText(lineaActual + " " + palabra);
+           if (medida.width < anchoMaximo) {
+             lineaActual += " " + palabra;
+           } else {
+             lineas.push(lineaActual);
+             lineaActual = palabra;
+           }
+         }
+         lineas.push(lineaActual);
+         return lineas;
+       }
+ 
+       // Obtener las líneas divididas
+       var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
+       var y = 1730;
+ 
+       // Dibujar cada línea en el canvas
+       for (var i = 0; i < lineas.length; i++) {
+         ctx.textAlign = "center";
+         ctx.font = "65px Century Gothic  ";
+         ctx.fillStyle = "black";
+ 
+         ctx.fillText(lineas[i], 2830, y);
+         y += tamanoFuente + 75; // Espacio vertical entre líneas
+       }
       //TEMARIO -----------------------------------------------------------------------
       // Ancho máximo permitido para el texto
+
+
       var anchoMaximo = 500;
 
       var x = 110; // Posición x inicial
