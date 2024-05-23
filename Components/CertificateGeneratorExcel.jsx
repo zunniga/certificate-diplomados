@@ -348,25 +348,17 @@ const CertificateGeneratorExcel = ({
       ctx.font = " 80px Futura Bk BT ";
       ctx.fillText(participant.CursoName, 3150, 1450);
 
-
-
       ctx.textAlign = "center";
       ctx.font = "bold 80px Futura Bk BT ";
       ctx.fillText(participant.NotaParcial, 4220, 1830);
-
 
       ctx.textAlign = "center";
       ctx.font = "bold 80px Futura Bk BT ";
       ctx.fillText(participant.NotaFinal, 4220, 2150);
 
-
-
       ctx.textAlign = "center";
       ctx.font = "bold 80px Futura Bk BT ";
       ctx.fillText(participant.Promedio, 4190, 2980);
-
-
-
 
       ctx.textAlign = "center";
       ctx.fillStyle = "black ";
@@ -374,47 +366,85 @@ const CertificateGeneratorExcel = ({
       ctx.fillText(participant.codigoParticipante, 1185, 2770);
 
       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
-       //TEXTO DE ORGANIZACION, FECHAS Y HORAS
-       var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
-       // Ancho máximo deseado para el texto
-       var textoCompleto =
-        participant.Modulos 
-       var anchoMaximo = 2200;
-       // Función para dividir el texto en líneas según el ancho máximo
-       function dividirTextoEnLineas(texto, anchoMaximo) {
-         var palabras = texto.split(" ");
-         var lineas = [];
-         var lineaActual = palabras[0];
-         for (var i = 1; i < palabras.length; i++) {
-           var palabra = palabras[i];
-           var medida = ctx.measureText(lineaActual + " " + palabra);
-           if (medida.width < anchoMaximo) {
-             lineaActual += " " + palabra;
-           } else {
-             lineas.push(lineaActual);
-             lineaActual = palabra;
-           }
-         }
-         lineas.push(lineaActual);
-         return lineas;
-       }
- 
-       // Obtener las líneas divididas
-       var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
-       var y = 1730;
- 
-       // Dibujar cada línea en el canvas
-       for (var i = 0; i < lineas.length; i++) {
-         ctx.textAlign = "center";
-         ctx.font = "65px Century Gothic  ";
-         ctx.fillStyle = "black";
- 
-         ctx.fillText(lineas[i], 2830, y);
-         y += tamanoFuente + 75; // Espacio vertical entre líneas
-       }
+      //TEXTO DE ORGANIZACION, FECHAS Y HORAS
+      var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
+// Definición del texto completo y el ancho máximo
+
+      // Definición del texto completo y el ancho máximo
+var textoCompleto = participant.Modulos;
+var anchoMaximo = 4700;
+var tamanoFuente = 50; // Tamaño de la fuente en píxeles
+var margenHorizontal = 150; // Margen horizontal entre el título del módulo y el texto del módulo
+var margenIzquierdo = 1950; // Margen izquierdo para el texto
+var margenSeparacion = 20; // Margen vertical entre el título y el texto
+
+// Función para convertir un número a números romanos (hasta 15)
+function convertirARomanos(num) {
+  if (num < 1 || num > 15) return ""; // Asegurar que el número esté en el rango 1-15
+  var romanos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
+  return romanos[num - 1];
+}
+
+// Función para dividir el texto en módulos según el carácter de viñeta
+function dividirTextoEnModulos(texto) {
+  return texto.split("• ").filter(Boolean); // Divide el texto donde encuentra "• " y filtra entradas vacías
+}
+
+// Función para dividir cada módulo en líneas según el ancho máximo
+function dividirTextoEnLineas(texto, anchoMaximo) {
+  var palabras = texto.split(" ");
+  var lineas = [];
+  var lineaActual = palabras[0];
+  for (var i = 1; i < palabras.length; i++) {
+    var palabra = palabras[i];
+    var medida = ctx.measureText(lineaActual + " " + palabra);
+    if (medida.width < anchoMaximo) {
+      lineaActual += " " + palabra;
+    } else {
+      lineas.push(lineaActual);
+      lineaActual = palabra;
+    }
+  }
+  lineas.push(lineaActual);
+  return lineas;
+}
+
+// Obtener los módulos divididos
+var modulos = dividirTextoEnModulos(textoCompleto);
+var cantidadModulos = modulos.length; // Obtener la cantidad de módulos
+
+var y = 1730;
+
+// Dibujar cada módulo y sus líneas en el canvas
+for (var i = 0; i < cantidadModulos && i < 15; i++) { // Limitar a 15 módulos
+  var tituloModulo = `MÓDULO ${convertirARomanos(i + 1)}`; // Convertir el número a romano
+  var textoModulo = modulos[i].trim();
+  
+  ctx.textAlign = "left"; // Alinear el texto a la izquierda
+  ctx.font = tamanoFuente + "px Futura Bk BT";
+  ctx.fillStyle = "black";
+
+  // Medir el ancho del título del módulo y del texto del módulo
+  var medidaTitulo = ctx.measureText(tituloModulo);
+  var medidaTexto = ctx.measureText(textoModulo);
+
+  // Calcular la altura total requerida para este módulo
+  var alturaModulo = Math.max(tamanoFuente, medidaTexto.actualBoundingBoxAscent + medidaTexto.actualBoundingBoxDescent);
+
+  // Calcular las posiciones horizontales para el título y el texto del módulo
+  var xTitulo = margenIzquierdo;
+  var xTexto = margenIzquierdo + margenHorizontal + medidaTitulo.width;
+
+  // Dibujar el título y el texto del módulo en la misma línea
+  ctx.fillText(tituloModulo, xTitulo, y + alturaModulo / 2); // Alinear el título al centro vertical del módulo
+  ctx.fillText(textoModulo, xTexto, y + alturaModulo / 2); // Alinear el texto al centro vertical del módulo
+
+  // Actualizar la posición vertical para el siguiente módulo
+  y += alturaModulo + margenSeparacion; // Sumar la altura del módulo y el margen de separación
+}
+
       //TEMARIO -----------------------------------------------------------------------
       // Ancho máximo permitido para el texto
-
 
       var anchoMaximo = 500;
 
