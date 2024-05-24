@@ -61,7 +61,7 @@ export default function Home() {
             {/* Botón del icono en la esquina superior derecha */}
             <Link href="/" >
                 
-            <IoIosExit onClick={handleLogout} color="#ef4444" className="w-12 h-12 absolute top-0 right-0 m-4 cursor-pointer text-gray-500" size={24} />
+            <IoIosExit onClick={handleLogout} color="#ffff" className="w-12 h-12 absolute top-0 right-0 m-4 cursor-pointer text-gray-500" size={24} />
 
             </Link>
 
