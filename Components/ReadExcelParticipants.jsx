@@ -8,7 +8,7 @@ class ParticipantDatabase extends Dexie {
   constructor() {
     super("ParticipantDatabase");
     this.version(1).stores({
-      participants: "++id, nombreParticipante, codigoParticipante, CursoName, FechaInicio,Modulos , Resolucion, NotaParcial, NotaFinal, Promedio, FechaFin, HorasAcademicas, estadoPago",
+      participants: "++id, nombreParticipante, codigoParticipante, CursoName, FechaInicio,Modulos , Resolucion, NotaParcial, NotaFinal, Promedio, FechaFin,  estadoPago",
     });
     this.participants = this.table("participants");
   }
@@ -41,7 +41,7 @@ const ReadExcelParticipants = () => {
       const FechaFin = ws['C3'] ? ws['C3'].v : '';
       const Modulos = ws['C4'] ? ws['C4'].v : '';
       const ResoDirectoral = ws['C5'] ? ws['C5'].v : '';
-      const HorasAcademicas = ws['C6'] ? ws['C6'].v : '';
+
      
 
       const participantes = [];
@@ -61,7 +61,6 @@ const ReadExcelParticipants = () => {
           CursoName: CursoName,
           FechaInicio: FechaInicio,
           FechaFin: FechaFin,
-          HorasAcademicas: HorasAcademicas,
           Modulos: Modulos,
           Resolucion: ResoDirectoral,
           NotaParcial: NotaParcial,

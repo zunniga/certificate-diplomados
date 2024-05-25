@@ -141,163 +141,169 @@ const CertificateGeneratorExcel = ({
   };
 
   // IMAGEN DE ANVERSO
-  const generateCertificate = async (participant, imageDataURL) => {
-    // Verificar si todos los campos necesarios están disponibles
-    if (imageDataURL) {
-      // Crear un lienzo
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+// IMAGEN DE ANVERSO
+const generateCertificate = async (participant, imageDataURL) => {
+  // Verificar si todos los campos necesarios están disponibles
+  if (imageDataURL) {
+    // Crear un lienzo
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-      canvas.width = 4677; // Ancho de tu imagen
-      canvas.height = 3307; // Alto de tu imagen
+    canvas.width = 4677; // Ancho de tu imagen
+    canvas.height = 3307; // Alto de tu imagen
 
-      // Cargar la imagen en el lienzo
-      const img = new Image();
-      img.src = imageDataURL;
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-      });
-      ctx.textAlign = "justify";
-      ctx.drawImage(img, 0, 0);
+    // Cargar la imagen en el lienzo
+    const img = new Image();
+    img.src = imageDataURL;
+    await new Promise((resolve, reject) => {
+      img.onload = resolve;
+      img.onerror = reject;
+    });
+    ctx.textAlign = "justify";
+    ctx.drawImage(img, 0, 0);
 
-      ctx.fillStyle = "#000000"; // Color del texto
-      ctx.textBaseline = "top";
+    ctx.fillStyle = "#000000"; // Color del texto
+    ctx.textBaseline = "top";
 
-      //ctx.textAlign = "center";
-      //ctx.font = 'bold 50px  Arial';
-      //ctx.fillText(participant.CursoName, 1528, 670);
+    //ctx.textAlign = "center";
+    //ctx.font = 'bold 50px  Arial';
+    //ctx.fillText(participant.CursoName, 1528, 670);
 
-      ctx.textAlign = "center";
-      ctx.font = "bold 140px Century Gothic"; //
-      ctx.fillText(participant.nombreParticipante, 2850, 1410);
+    ctx.textAlign = "center";
+    ctx.font = "bold 140px Century Gothic"; //
+    ctx.fillText(participant.nombreParticipante, 2850, 1410);
 
-      // Obtener la fecha actual
-      var currentDate = new Date();
+    // Obtener la fecha actual
+    var currentDate = new Date();
 
-      // Array con los nombres de los meses en español
-      var meses = [
-        "enero",
-        "febrero",
-        "marzo",
-        "abril",
-        "mayo",
-        "junio",
-        "julio",
-        "agosto",
-        "septiembre",
-        "octubre",
-        "noviembre",
-        "diciembre",
-      ];
+    // Array con los nombres de los meses en español
+    var meses = [
+      "enero",
+      "febrero",
+      "marzo",
+      "abril",
+      "mayo",
+      "junio",
+      "julio",
+      "agosto",
+      "septiembre",
+      "octubre",
+      "noviembre",
+      "diciembre",
+    ];
 
-      // Obtener el nombre del mes actual
-      var mesActual = meses[currentDate.getMonth()];
+    // Obtener el nombre del mes actual
+    var mesActual = meses[currentDate.getMonth()];
 
-      // Texto a dibujar
-      var texto = "LIMA, " + mesActual + " del " + currentDate.getFullYear();
+    // Texto a dibujar
+    var texto = "Lima, " + mesActual + " del " + currentDate.getFullYear();
 
-      // Dibujar el texto en el lienzo
-      ctx.textAlign = "center";
-      ctx.font = "65px Century Gothic";
-      ctx.fillText(texto, 3650, 2480);
+    // Dibujar el texto en el lienzo
+    ctx.textAlign = "center";
+    ctx.font = "65px Century Gothic";
+    ctx.fillText(texto, 3650, 2480);
 
-      ctx.textAlign = "center";
-      ctx.font = " 65px Century Gothic"; //
-      ctx.fillText(texto, 3650, 2480);
+    ctx.textAlign = "center";
+    ctx.font = " 65px Century Gothic"; //
+    ctx.fillText(texto, 3650, 2480);
 
-      //------------------------------------------------------------------------------------------------------------------
-      ctx.textAlign = "center";
-      ctx.fillStyle = "black ";
-      ctx.font = "bold 55px Century Gothic  ";
-      ctx.fillText(participant.codigoParticipante, 700, 2875);
+    //------------------------------------------------------------------------------------------------------------------
+    ctx.textAlign = "center";
+    ctx.fillStyle = "black ";
+    ctx.font = "bold 55px Century Gothic  ";
+    ctx.fillText(participant.codigoParticipante, 700, 2875);
 
-      //TEXTO DE ORGANIZACION, FECHAS Y HORAS
-      var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
-      // Ancho máximo deseado para el texto
-      var textoCompleto =
-        "Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN " +
-        participant.CursoName +
-        " en su calidad de ASISTENTE, aprobado mediante la " +
-        participant.Resolucion +
-        " , llevado a cabo del " +
-        participant.FechaInicio +
-        " al " +
-        participant.FechaFin +
-        " con una duracion de 420 hrs académicas, equivalente a " +
-        participant.HorasAcademicas +
-        ", de conformidad con la ley Universitaria vigente.";
+    //TEXTO DE ORGANIZACION, FECHAS Y HORAS
+    var tamanoFuente = 5; // Tamaño de fuente en píxeles+ participant.FechaFin + ' , con una duración de 420 hrs académicas, equivalente a ';
+    // Ancho máximo deseado para el texto
+    var textoCompleto =
+      "Por haber culminado y aprobado satisfactoriamente el DIPLOMADO DE ESPECIALIZACIÓN " +
+      participant.CursoName +
+      " en su calidad de asistente, aprobado mediante la " +
+      participant.Resolucion +
+      " , llevado a cabo del " +
+      participant.FechaInicio +
+      " al " +
+      participant.FechaFin +
+      " con una duracion de 420 horas académicas, equivalente a 26 créditos" +
+       
+      ", de conformidad con la ley Universitaria vigente.";
 
-      var anchoMaximo = 2400;
+    var anchoMaximo = 2500;
 
-      // Función para dividir el texto en líneas según el ancho máximo
-      function dividirTextoEnLineas(texto, anchoMaximo) {
-        var palabras = texto.split(" ");
-        var lineas = [];
-        var lineaActual = palabras[0];
-        for (var i = 1; i < palabras.length; i++) {
-          var palabra = palabras[i];
-          var medida = ctx.measureText(lineaActual + " " + palabra);
-          if (medida.width < anchoMaximo) {
-            lineaActual += " " + palabra;
-          } else {
-            lineas.push(lineaActual);
-            lineaActual = palabra;
-          }
+    // Función para dividir el texto en líneas según el ancho máximo
+    function dividirTextoEnLineas(texto, anchoMaximo) {
+      var palabras = texto.split(" ");
+      var lineas = [];
+      var lineaActual = palabras[0];
+      for (var i = 1; i < palabras.length; i++) {
+        var palabra = palabras[i];
+        var medida = ctx.measureText(lineaActual + " " + palabra);
+        if (medida.width < anchoMaximo) {
+          lineaActual += " " + palabra;
+        } else {
+          lineas.push(lineaActual);
+          lineaActual = palabra;
         }
-        lineas.push(lineaActual);
-        return lineas;
       }
+      lineas.push(lineaActual);
+      return lineas;
+    }
 
-      // Obtener las líneas divididas
-      var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
-      var y = 1680; // Posición vertical inicial
+    // Obtener las líneas divididas
+    var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
+    var y = 1680; // Posición vertical inicial
 
-      // Dibujar cada línea en el canvas
-      for (var i = 0; i < lineas.length; i++) {
-        var linea = lineas[i];
-        var partes = linea.split(
-          new RegExp(
-            `(${participant.CursoName}|${participant.HorasAcademicas})`,
-            "g"
-          )
-        );
+    // Dibujar cada línea en el canvas
+    for (var i = 0; i < lineas.length; i++) {
+      var linea = lineas[i];
+      var partes = linea.split(
+        new RegExp(
+          `(${participant.CursoName}|420 horas académicas|26 créditos)`,
+          "g"
+        )
+      );
 
-        // Calcular el ancho total de la línea para centrarla
-        var anchoTotal = partes.reduce((total, parte) => {
-          var font =
-            parte === participant.CursoName ||
-            parte === participant.HorasAcademicas
-              ? "bold 65px Century Gothic"
-              : "65px Century Gothic";
-          ctx.font = font;
-          return total + ctx.measureText(parte).width;
-        }, 0);
+      // Calcular el ancho total de la línea para centrarla
+      var anchoTotal = partes.reduce((total, parte) => {
+        var font =
+          parte === participant.CursoName ||
+          parte === "420 horas académicas" ||
+          parte === "26 créditos"
+            ? "bold 65px Century Gothic"
+            : "65px Century Gothic";
+        ctx.font = font;
+        return total + ctx.measureText(parte).width;
+      }, 0);
 
-        var x = 2830 - anchoTotal / 2; // Centrar horizontalmente
-        ctx.textAlign = "left"; // Alinear el texto a la izquierda para el dibujo manual
-        ctx.fillStyle = "black";
+      var x = 2730 - anchoTotal / 2; // Centrar horizontalmente
+      ctx.textAlign = "left"; // Alinear el texto a la izquierda para el dibujo manual
+      ctx.fillStyle = "black";
 
-        // Dibujar cada parte de la línea
-        partes.forEach((parte) => {
-          var font =
-            parte === participant.CursoName ||
-            parte === participant.HorasAcademicas
-              ? "bold 65px Century Gothic"
-              : "65px Century Gothic";
-          ctx.font = font;
+      // Dibujar cada parte de la línea
+      partes.forEach((parte) => {
+        var font =
+          parte === participant.CursoName ||
+          parte === "420 horas académicas" ||
+          parte === "26 créditos"
+            ? "bold 65px Century Gothic"
+            : "65px Century Gothic";
+        ctx.font = font;
 
-          // Si la parte es el CursoName, convertir a mayúsculas
-          var textToDraw =
-            parte === participant.CursoName ? parte.toUpperCase() : parte;
+        // Si la parte es el CursoName, convertir a mayúsculas
+        var textToDraw =
+          parte === participant.CursoName ? parte.toUpperCase() : parte;
 
-          ctx.fillText(textToDraw, x, y);
-          x += ctx.measureText(textToDraw).width; // Incrementar la posición x para la siguiente parte
-        });
+        ctx.fillText(textToDraw, x, y);
+        x += ctx.measureText(textToDraw).width; // Incrementar la posición x para la siguiente parte
+      });
 
-        // Incrementar la posición y para la siguiente línea
-        y += 55 + 55; // Espacio vertical entre líneas (tamaño de fuente + 50)
-      }
+      // Incrementar la posición y para la siguiente línea
+      y += 55 + 55; // Espacio vertical entre líneas (tamaño de fuente + 50)
+    
+  
+};
+
 
       //TEMARIO -----------------------------------------------------------------------
       // Ancho máximo permitido para el texto
