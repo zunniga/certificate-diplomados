@@ -53,8 +53,6 @@ export default function Home() {
     useState<CertificatesList>([]);
   const [physicalCertificates, setPhysicalCertificates] =
     useState<CertificatesList>([]);
-  const [companyCertificates, setCompanyCertificates] =
-    useState<CertificatesList>([]);
 
   useEffect(() => {
     const obtenerCertificados = async () => {
@@ -68,12 +66,8 @@ export default function Home() {
         const physicalCerts = certificates.filter(
           (cert) => cert.type === "certificadoFisico"
         );
-        const companyCerts = certificates.filter(
-          (cert) => cert.type === "certificadoOnly"
-        );
         setDigitalCertificates(digitalCerts);
         setPhysicalCertificates(physicalCerts);
-        setCompanyCertificates(companyCerts);
       } catch (error) {
         console.error("Error al obtener los certificados:", error);
       }
@@ -83,31 +77,48 @@ export default function Home() {
   }, []);
 
   const exportarPDF = () => {
-    const allCertificates: Certificate[] = [
-      ...digitalCertificates,
-      ...physicalCertificates,
-      ...companyCertificates,
-    ];
+    // Definir el tipo de groupedCertificates
+    const groupedCertificates: { [key: string]: Certificate[] } = {};
 
-    allCertificates.forEach((certificate, index) => {
+    digitalCertificates.forEach(certificate => {
+      if (!groupedCertificates[certificate.ownerName]) {
+        groupedCertificates[certificate.ownerName] = [];
+      }
+      groupedCertificates[certificate.ownerName].push(certificate);
+    });
+
+    physicalCertificates.forEach(certificate => {
+      if (!groupedCertificates[certificate.ownerName]) {
+        groupedCertificates[certificate.ownerName] = [];
+      }
+      groupedCertificates[certificate.ownerName].push(certificate);
+    });
+
+    // Crear un PDF para cada propietario
+    Object.keys(groupedCertificates).forEach(ownerName => {
+      const certificates = groupedCertificates[ownerName];
       const pdf = new jsPDF("landscape"); // Establece el formato horizontal del PDF
-      const width = pdf.internal.pageSize.getWidth(); // Obtiene el ancho de la página
-      const height = pdf.internal.pageSize.getHeight(); // Obtiene la altura de la página
-      pdf.addImage(
-        certificate.certificateDataURL,
-        "JPEG",
-        0,
-        0,
-        width,
-        height,
-        "",
-        "SLOW"
-      ); // Agrega la imagen al tamaño de la página con calidad rápida
-      pdf.save(
-        `certificado_${certificate.ownerName}_${certificate.type}_${
-          index + 1
-        }.pdf`
-      ); // Guarda el PDF con un nombre único basado en el nombre del participante, su tipo y el índice
+
+      certificates.forEach((certificate, index) => {
+        if (index > 0) {
+          pdf.addPage(); // Agrega una nueva página para cada certificado adicional
+        }
+        const width = pdf.internal.pageSize.getWidth(); // Obtiene el ancho de la página
+        const height = pdf.internal.pageSize.getHeight(); // Obtiene la altura de la página
+        pdf.addImage(
+          certificate.certificateDataURL,
+          "JPEG",
+          0,
+          0,
+          width,
+          height,
+          "",
+          "SLOW"
+        ); // Agrega la imagen al tamaño de la página con calidad rápida
+      });
+
+      // Guarda el PDF con un nombre único basado en el nombre del participante
+      pdf.save(`Diplomado_${ownerName}.pdf`);
     });
   };
 
@@ -154,7 +165,7 @@ export default function Home() {
                       Retroceder
                     </button>
                   </Link>
-                  <Link href="/" passHref legacyBehavior>
+                  <Link href="/cursos/cert_export" passHref legacyBehavior>
                     <button className="join-item bg-slate-200 text-gray-900 btn">
                       Avanzar
                     </button>
