@@ -419,7 +419,7 @@ var modulos = dividirTextoEnModulos(textoCompleto);
 var cantidadModulos = Math.min(modulos.length, 15); // Obtener la cantidad de módulos (limitado a 15)
 
 var yInicial = 1730; // Posición inicial en Y
-var alturaCanvas = 2500; // Altura total del canvas (ejemplo)
+var alturaCanvas = 2650; // Altura total del canvas (ejemplo)
 var alturaDisponible = alturaCanvas - yInicial;
 var alturaModulo = alturaDisponible / cantidadModulos; // Altura equitativa para cada módulo
 
@@ -448,7 +448,6 @@ for (var i = 0; i < cantidadModulos; i++) {
   // Renderizar el texto del módulo
   ctx.fillText(textoModulo, xTexto, yTexto);
 }
-
 
 
       //TEMARIO -----------------------------------------------------------------------
