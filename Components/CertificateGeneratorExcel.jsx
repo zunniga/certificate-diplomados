@@ -379,10 +379,10 @@ const generateCertificate = async (participant, imageDataURL) => {
       // Definición del texto completo y el ancho máximo
 var textoCompleto = participant.Modulos;
 var anchoMaximo = 4700;
-var tamanoFuente = 50; // Tamaño de la fuente en píxeles
-var margenHorizontal = 150; // Margen horizontal entre el título del módulo y el texto del módulo
+var tamanoFuente = 45; // Tamaño de la fuente en píxeles
+var margenHorizontal = 450; // Margen horizontal entre el título del módulo y el texto del módulo
 var margenIzquierdo = 1950; // Margen izquierdo para el texto
-var margenSeparacion = 20; // Margen vertical entre el título y el texto
+var margenSeparacion = -7; // Margen vertical entre el título y el texto
 
 // Función para convertir un número a números romanos (hasta 15)
 function convertirARomanos(num) {
@@ -415,38 +415,45 @@ function dividirTextoEnLineas(texto, anchoMaximo) {
   return lineas;
 }
 
-// Obtener los módulos divididos
+// Separar los módulos
 var modulos = dividirTextoEnModulos(textoCompleto);
-var cantidadModulos = modulos.length; // Obtener la cantidad de módulos
+var cantidadModulos = Math.min(modulos.length, 15); // Obtener la cantidad de módulos (limitado a 15)
 
-var y = 1730;
+var y = 1730; // Posición inicial en Y
 
-// Dibujar cada módulo y sus líneas en el canvas
-for (var i = 0; i < cantidadModulos && i < 15; i++) { // Limitar a 15 módulos
+// Dibujar cada módulo en el canvas
+for (var i = 0; i < cantidadModulos; i++) {
   var tituloModulo = `MÓDULO ${convertirARomanos(i + 1)}`; // Convertir el número a romano
   var textoModulo = modulos[i].trim();
-  
-  ctx.textAlign = "left"; // Alinear el texto a la izquierda
-  ctx.font = tamanoFuente + "px Futura Bk BT";
-  ctx.fillStyle = "black";
-
-  // Medir el ancho del título del módulo y del texto del módulo
-  var medidaTitulo = ctx.measureText(tituloModulo);
-  var medidaTexto = ctx.measureText(textoModulo);
 
   // Calcular la altura total requerida para este módulo
+  var medidaTitulo = ctx.measureText(tituloModulo);
+  var medidaTexto = ctx.measureText(textoModulo);
   var alturaModulo = Math.max(tamanoFuente, medidaTexto.actualBoundingBoxAscent + medidaTexto.actualBoundingBoxDescent);
 
   // Calcular las posiciones horizontales para el título y el texto del módulo
   var xTitulo = margenIzquierdo;
-  var xTexto = margenIzquierdo + margenHorizontal + medidaTitulo.width;
+  var xTexto = margenIzquierdo + margenHorizontal;
 
-  // Dibujar el título y el texto del módulo en la misma línea
-  ctx.fillText(tituloModulo, xTitulo, y + alturaModulo / 2); // Alinear el título al centro vertical del módulo
-  ctx.fillText(textoModulo, xTexto, y + alturaModulo / 2); // Alinear el texto al centro vertical del módulo
+  // Alinear el texto al centro vertical del módulo
+  var yTitulo = y + alturaModulo / 2;
+
+  // Establecer la fuente y el color del texto del título del módulo
+  ctx.textAlign = "left";
+  ctx.font = `${tamanoFuente}px Futura Bk BT`;
+  ctx.fillStyle = "black";
+
+  // Renderizar el título del módulo
+  ctx.fillText(tituloModulo, xTitulo, yTitulo);
+
+  // Ajustar la posición vertical para el texto del módulo
+  var yTexto = yTitulo + tamanoFuente * 0; // Subir el texto un 25% de la altura de la fuente
+
+  // Renderizar el texto del módulo
+  ctx.fillText(textoModulo, xTexto, yTexto);
 
   // Actualizar la posición vertical para el siguiente módulo
-  y += alturaModulo + margenSeparacion; // Sumar la altura del módulo y el margen de separación
+  y += alturaModulo + tamanoFuente + margenSeparacion; // Sumar la altura del módulo y el margen de separación
 }
 
       //TEMARIO -----------------------------------------------------------------------
