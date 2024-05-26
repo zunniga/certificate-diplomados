@@ -379,7 +379,7 @@ const generateCertificate = async (participant, imageDataURL) => {
       // Definición del texto completo y el ancho máximo
 var textoCompleto = participant.Modulos;
 var anchoMaximo = 4700;
-var tamanoFuente = 45; // Tamaño de la fuente en píxeles
+var tamanoFuente = 50; // Tamaño de la fuente en píxeles
 var margenHorizontal = 450; // Margen horizontal entre el título del módulo y el texto del módulo
 var margenIzquierdo = 1950; // Margen izquierdo para el texto
 var margenSeparacion = -7; // Margen vertical entre el título y el texto
@@ -415,29 +415,28 @@ function dividirTextoEnLineas(texto, anchoMaximo) {
   return lineas;
 }
 
-// Separar los módulos
 var modulos = dividirTextoEnModulos(textoCompleto);
 var cantidadModulos = Math.min(modulos.length, 15); // Obtener la cantidad de módulos (limitado a 15)
 
-var y = 1730; // Posición inicial en Y
+var yInicial = 1730; // Posición inicial en Y
+var alturaCanvas = 2500; // Altura total del canvas (ejemplo)
+var alturaDisponible = alturaCanvas - yInicial;
+var alturaModulo = alturaDisponible / cantidadModulos; // Altura equitativa para cada módulo
 
 // Dibujar cada módulo en el canvas
 for (var i = 0; i < cantidadModulos; i++) {
-  var tituloModulo = `MÓDULO ${convertirARomanos(i + 1)}`; // Convertir el número a romano
+  var tituloModulo = `Módulo ${convertirARomanos(i + 1)}`; // Convertir el número a romano
   var textoModulo = modulos[i].trim();
-
-  // Calcular la altura total requerida para este módulo
-  var medidaTitulo = ctx.measureText(tituloModulo);
-  var medidaTexto = ctx.measureText(textoModulo);
-  var alturaModulo = Math.max(tamanoFuente, medidaTexto.actualBoundingBoxAscent + medidaTexto.actualBoundingBoxDescent);
 
   // Calcular las posiciones horizontales para el título y el texto del módulo
   var xTitulo = margenIzquierdo;
   var xTexto = margenIzquierdo + margenHorizontal;
 
-  // Alinear el texto al centro vertical del módulo
-  var yTitulo = y + alturaModulo / 2;
-
+  // Posiciones verticales
+  var yBase = yInicial + (i * alturaModulo); // Base del módulo
+  var yTitulo = yBase + (alturaModulo / 4); // Título a 1/4 del módulo desde la base
+  var yTexto = yBase + (alturaModulo / 4); // Texto a 1/2 del módulo desde la base
+ 
   // Establecer la fuente y el color del texto del título del módulo
   ctx.textAlign = "left";
   ctx.font = `${tamanoFuente}px Futura Bk BT`;
@@ -446,15 +445,11 @@ for (var i = 0; i < cantidadModulos; i++) {
   // Renderizar el título del módulo
   ctx.fillText(tituloModulo, xTitulo, yTitulo);
 
-  // Ajustar la posición vertical para el texto del módulo
-  var yTexto = yTitulo + tamanoFuente * 0; // Subir el texto un 25% de la altura de la fuente
-
   // Renderizar el texto del módulo
   ctx.fillText(textoModulo, xTexto, yTexto);
-
-  // Actualizar la posición vertical para el siguiente módulo
-  y += alturaModulo + tamanoFuente + margenSeparacion; // Sumar la altura del módulo y el margen de separación
 }
+
+
 
       //TEMARIO -----------------------------------------------------------------------
       // Ancho máximo permitido para el texto
