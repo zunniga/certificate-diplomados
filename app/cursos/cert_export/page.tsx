@@ -1,71 +1,68 @@
-"use client";
+"use client"
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import jsPDF from "jspdf";
 import { ImageDatabase } from "@/Components/ImageUploaderDB";
 
-const imageDB = new ImageDatabase(); // Asegúrate de crear la instancia de la base de datos
+const imageDB = new ImageDatabase();
 
-// Define la interfaz para el objeto de certificado
 interface Certificate {
   id: number;
   ownerName: string;
   type: string;
   certificateDataURL: string;
+  certificateUploaded: boolean;
 }
 
-// Define el tipo para la lista de certificados
 type CertificatesList = Certificate[];
 
-const CertificatesTable: React.FC<{ certificates: CertificatesList }> = ({
-  certificates,
-}) => {
+const CertificatesTable: React.FC<{ certificates: CertificatesList, title: string }> = ({ certificates, title }) => {
   return (
-    <table className="rounded-xl table table-xs table-auto table-pin-rows">
-      <thead>
-        <tr>
-          <th>
-            <label>
-              <input type="checkbox" className="checkbox" />
-            </label>
-          </th>
-          <th>Nombre del Participante</th>
-        </tr>
-      </thead>
-      <tbody>
-        {certificates.map((certificate, index) => (
-          <tr key={index}>
-            <th>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </th>
-            <td>{certificate.ownerName}</td>
+    <div>
+      <h2 className="text-lg mb-2">{title}</h2>
+      <table className="rounded-xl table table-xs table-auto table-pin-rows mb-4">
+        <thead>
+          <tr>
+            <th>Nombre del Participante</th>
+            <th>Verificado</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {certificates.map((certificate, index) => (
+            <tr key={index}>
+              <td>{certificate.ownerName}</td>
+              <td>
+                {certificate.certificateUploaded ? (
+                  <span className="text-green-500">&#10004;</span>
+                ) : (
+                  <span className="text-red-500">&#10008;</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
 export default function Home() {
-  const [digitalCertificates, setDigitalCertificates] =
-    useState<CertificatesList>([]);
-  const [physicalCertificates, setPhysicalCertificates] =
-    useState<CertificatesList>([]);
+  const [digitalCertificates, setDigitalCertificates] = useState<CertificatesList>([]);
+  const [physicalCertificates, setPhysicalCertificates] = useState<CertificatesList>([]);
 
   useEffect(() => {
     const obtenerCertificados = async () => {
       try {
-        const certificates: CertificatesList =
-          await imageDB.certificates.toArray();
-        // Filtrar certificados por tipo
-        const digitalCerts = certificates.filter(
-          (cert) => cert.type === "certificadoDigital"
-        );
-        const physicalCerts = certificates.filter(
-          (cert) => cert.type === "certificadoFisico"
-        );
+        const certificates: CertificatesList = await imageDB.certificates.toArray();
+        
+        const digitalCerts = certificates
+          .filter((cert) => cert.type === "certificadoDigital")
+          .map((cert) => ({ ...cert, certificateUploaded: true }));
+
+        const physicalCerts = certificates
+          .filter((cert) => cert.type === "certificadoFisico")
+          .map((cert) => ({ ...cert, certificateUploaded: true }));
+
         setDigitalCertificates(digitalCerts);
         setPhysicalCertificates(physicalCerts);
       } catch (error) {
@@ -77,34 +74,25 @@ export default function Home() {
   }, []);
 
   const exportarPDF = () => {
-    // Definir el tipo de groupedCertificates
     const groupedCertificates: { [key: string]: Certificate[] } = {};
 
-    digitalCertificates.forEach(certificate => {
+    digitalCertificates.concat(physicalCertificates).forEach(certificate => {
       if (!groupedCertificates[certificate.ownerName]) {
         groupedCertificates[certificate.ownerName] = [];
       }
       groupedCertificates[certificate.ownerName].push(certificate);
     });
 
-    physicalCertificates.forEach(certificate => {
-      if (!groupedCertificates[certificate.ownerName]) {
-        groupedCertificates[certificate.ownerName] = [];
-      }
-      groupedCertificates[certificate.ownerName].push(certificate);
-    });
-
-    // Crear un PDF para cada propietario
     Object.keys(groupedCertificates).forEach(ownerName => {
       const certificates = groupedCertificates[ownerName];
-      const pdf = new jsPDF("landscape"); // Establece el formato horizontal del PDF
+      const pdf = new jsPDF("landscape");
 
       certificates.forEach((certificate, index) => {
         if (index > 0) {
-          pdf.addPage(); // Agrega una nueva página para cada certificado adicional
+          pdf.addPage();
         }
-        const width = pdf.internal.pageSize.getWidth(); // Obtiene el ancho de la página
-        const height = pdf.internal.pageSize.getHeight(); // Obtiene la altura de la página
+        const width = pdf.internal.pageSize.getWidth();
+        const height = pdf.internal.pageSize.getHeight();
         pdf.addImage(
           certificate.certificateDataURL,
           "JPEG",
@@ -114,36 +102,31 @@ export default function Home() {
           height,
           "",
           "SLOW"
-        ); // Agrega la imagen al tamaño de la página con calidad rápida
+        );
       });
 
-      // Guarda el PDF con un nombre único basado en el nombre del participante
       pdf.save(`Diplomado_${ownerName}.pdf`);
     });
   };
 
   return (
     <div className="bg-gray-500 h-screen overflow-hidden">
-      {/* Encabezado fijo */}
       <header className="mt-8 text-center">
         <h1 className="mb-4 text-3xl">EMISIÓN DE DIPLOMADOS</h1>
         <ul className="steps w-full">
-          {/* Envuelve cada <li> en un componente <Link> */}
           <li className="step step-info ">
             <Link href="/cursos/">Insercion de Participantes</Link>
           </li>
           <li className="step step-info">
             <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
           </li>
-
           <li className="step step-info">
             <Link href="/cursos/cert_soloemp" passHref>
-            Exportar en PDF
+              Exportar en PDF
             </Link>
           </li>
         </ul>
       </header>
-      {/* Sidebar */}
       <div className="bg-gray-500 flex h-full">
         {/* Contenedor Principal */}
         <div className=" flex w-full ">
@@ -175,15 +158,9 @@ export default function Home() {
               <li></li>
             </ul>
           </div>
-          <div className="overflow-x-auto h-96 mt-4 ml-3 rounded-lg ">
-            {/* Tabla para Certificados Digitales */}
-            <h2 className="text-lg ">Diplomados - Anverso </h2>
-            <CertificatesTable certificates={digitalCertificates} />
-          </div>
-          <div className="overflow-x-auto h-96 mt-4 ml-3 rounded-lg ">
-            {/* Tabla para Certificados Físicos */}
-            <h2 className="text-lg ">Diplomados - Reverso</h2>
-            <CertificatesTable certificates={physicalCertificates} />
+          <div className="overflow-x-auto h-96 mt-4 ml-3 rounded-lg">
+            <CertificatesTable certificates={digitalCertificates} title="Diplomados(ANVERSO)" />
+            <CertificatesTable certificates={physicalCertificates} title="Diplomados(REVERSO)" />
           </div>
         </div>
       </div>
