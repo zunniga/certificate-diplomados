@@ -49,8 +49,18 @@ const CertificatesTable: React.FC<{ certificates: CertificatesList, title: strin
 export default function Home() {
   const [digitalCertificates, setDigitalCertificates] = useState<CertificatesList>([]);
   const [physicalCertificates, setPhysicalCertificates] = useState<CertificatesList>([]);
+  const [excelFolderPath, setExcelFolderPath] = useState<string | null>(null);
 
   useEffect(() => {
+    // Obtener la ruta del archivo Excel desde sessionStorage
+    const storedExcelFilePath = sessionStorage.getItem('excelFilePath');
+    if (storedExcelFilePath) {
+      // Extraer la carpeta del path
+      const folderPath = storedExcelFilePath.substring(0, storedExcelFilePath.lastIndexOf("\\") + 1);
+      setExcelFolderPath(folderPath);
+      console.log('Ruta de la carpeta del archivo Excel obtenida de sessionStorage:', folderPath);
+    }
+
     const obtenerCertificados = async () => {
       try {
         const certificates: CertificatesList = await imageDB.certificates.toArray();
@@ -74,40 +84,48 @@ export default function Home() {
   }, []);
 
   const exportarPDF = () => {
-    const groupedCertificates: { [key: string]: Certificate[] } = {};
+    // Si no se ha seleccionado un archivo Excel, salir de la función
+    if (!excelFolderPath) {
+      console.error("No se ha seleccionado ningún archivo de Excel.");
+      return;
+    }
 
-    digitalCertificates.concat(physicalCertificates).forEach(certificate => {
-      if (!groupedCertificates[certificate.ownerName]) {
-        groupedCertificates[certificate.ownerName] = [];
+    // Realizar una solicitud HTTP para enviar la ruta de la carpeta al servidor
+    fetch('../api/apiPdf', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ excelFolderPath }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al enviar la ruta de la carpeta al servidor.');
       }
-      groupedCertificates[certificate.ownerName].push(certificate);
+      return response.json();
+    })
+    .then(data => {
+      console.log('Respuesta del servidor:', data);
+      // Procesar la respuesta del servidor si es necesario
+    })
+    .catch(error => {
+      console.error('Error:', error);
     });
 
-    Object.keys(groupedCertificates).forEach(ownerName => {
-      const certificates = groupedCertificates[ownerName];
-      const pdf = new jsPDF("landscape");
-
-      certificates.forEach((certificate, index) => {
-        if (index > 0) {
-          pdf.addPage();
-        }
-        const width = pdf.internal.pageSize.getWidth();
-        const height = pdf.internal.pageSize.getHeight();
-        pdf.addImage(
-          certificate.certificateDataURL,
-          "JPEG",
-          0,
-          0,
-          width,
-          height,
-          "",
-          "SLOW"
-        );
-      });
-
-      pdf.save(`Diplomado_${ownerName}.pdf`);
-    });
+    // Resto de tu lógica para generar los PDFs...
   };
+
+  // Obtener la ruta del archivo Excel del almacenamiento local
+  let routeExcel;
+  const excelFilePath = sessionStorage.getItem('excelFilePath');
+  if (excelFilePath !== null) {
+    routeExcel = excelFilePath.replace(/\\/g, '/').replace(/\/[^/]*$/, "");
+    console.log(routeExcel);
+  } else {
+    console.log("La ruta del archivo Excel no está definida en el almacenamiento local.");
+    return; // Salir de la función si no se encuentra la ruta del archivo Excel
+  }
+  console.log("rutaaaaaaaa", routeExcel);
 
   return (
     <div className="bg-gray-500 h-screen overflow-hidden">
@@ -115,7 +133,7 @@ export default function Home() {
         <h1 className="mb-4 text-3xl">EMISIÓN DE DIPLOMADOS</h1>
         <ul className="steps w-full">
           <li className="step step-info ">
-            <Link href="/cursos/">Insercion de Participantes</Link>
+            <Link href="/cursos/">Inserción de Participantes</Link>
           </li>
           <li className="step step-info">
             <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
