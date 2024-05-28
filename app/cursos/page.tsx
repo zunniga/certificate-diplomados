@@ -218,7 +218,7 @@ export default function Home() {
                       Retroceder
                     </button>
                   </Link>
-                  <Link href="/cursos/cert_phisyc" passHref legacyBehavior>
+                  <Link href="/cursos/graduate_reverso" passHref legacyBehavior>
                     <button className="join-item bg-slate-200 text-gray-900 btn">
                       Avanzar
                     </button>
@@ -281,9 +281,9 @@ export default function Home() {
      
       <div>
         <dialog id="my_modal_1" className="modal" ref={modalRef}>
-          <div className="modal-box">
+          <div className="modal-box bg-sky-500">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-lg mb-4">Ingresar Datos</h3>
+              <h3 className="font-bold text-lg mb-4">Ingresa los datos del participante</h3>
               <button className="close-button" onClick={closeModal}>
                 <IoCloseCircle className="text-red-500 h-8 w-8 mb-4" />
               </button>

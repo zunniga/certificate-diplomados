@@ -12,16 +12,16 @@ const CertificateGenerator = () => {
   const [HorasAcademicas, setHorasAcademicas] = useState('');
   const [ParticipanteName, setParticipanteName] = useState('');
   const [CodigoParticipante, setCodigoParticipante] = useState('');
-  const [imageDataURL, setImageDataURL] = useState(null);
+  const [digitalImageDataURL, setDigitalImageDataURL] = useState(null);
+  const [physicalImageDataURL, setPhysicalImageDataURL] = useState(null);
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState(true);
-  const [selectedImageType, setSelectedImageType] = useState(''); // Nuevo estado para almacenar el tipo de imagen seleccionado
+  const [selectedImageType, setSelectedImageType] = useState('');
 
   useEffect(() => {
     const textarea = document.getElementById('Temario');
     textarea.placeholder = "Temario (Cada tema separado por un salto de línea) \nTema 1 \nTema 2 \nTema 3";
-
   }, []);
-  // Función para verificar si todos los campos requeridos están llenos
+
   const checkFields = () => {
     if (
       CursoName &&
@@ -39,60 +39,54 @@ const CertificateGenerator = () => {
       setSubmitButtonDisabled(true);
     }
   };
-  // Llama a checkFields cada vez que uno de los campos cambie
-  useEffect(() => {
-    checkFields();
-  }, [CursoName, FechaInicio, FechaFin, Ponente, Temario, HorasAcademicas, ParticipanteName, CodigoParticipante, imageDataURL]);
 
   useEffect(() => {
-    loadSelectedImage();
+    checkFields();
+  }, [CursoName, FechaInicio, FechaFin, Ponente, Temario, HorasAcademicas, ParticipanteName, CodigoParticipante, digitalImageDataURL, physicalImageDataURL]);
+
+  useEffect(() => {
+    loadSelectedImages();
   }, [selectedImageType]);
-  // Función para cargar la imagen correspondiente según el tipo seleccionado
-  const loadSelectedImage = async () => {
+
+  const loadSelectedImages = async () => {
     try {
-      const images = await imageDB.images.toArray(); // Obtener todos los elementos de la base de datos
+      const images = await imageDB.images.toArray();
       if (images.length > 0) {
-        // Obtener la imagen correspondiente al tipo seleccionado
-        const selectedImage = images.find(image => {
-          // Verificamos si el nombre de la imagen coincide con los nombres específicos
-          return image.name === 'imgCertiDigital' && selectedImageType === 'tipo1' ||
-            image.name === 'imgCertiPhisyc' && selectedImageType === 'tipo2' ||
-            image.name === 'imgCertiOnly' && selectedImageType === 'tipo3';
-        });
-        if (selectedImage) {
-          setImageDataURL(selectedImage.imageDataURL);
-          console.log('Imagen obtenida de la base de datos:', selectedImage);
+        const digitalImage = images.find(image => image.name === 'imgCertiDigital');
+        const physicalImage = images.find(image => image.name === 'imgCertiPhisyc');
+
+        if (digitalImage) {
+          setDigitalImageDataURL(digitalImage.imageDataURL);
+          console.log('Imagen digital obtenida de la base de datos:', digitalImage);
         } else {
-          console.log('No se encontró una imagen para el tipo seleccionado.');
+          console.log('No se encontró una imagen digital.');
+        }
+
+        if (physicalImage) {
+          setPhysicalImageDataURL(physicalImage.imageDataURL);
+          console.log('Imagen física obtenida de la base de datos:', physicalImage);
+        } else {
+          console.log('No se encontró una imagen física.');
         }
       } else {
         console.log('No se encontraron imágenes en la base de datos.');
       }
     } catch (error) {
-      console.error('Error al cargar la imagen desde la Base de Datos:', error);
+      console.error('Error al cargar las imágenes desde la Base de Datos:', error);
     }
   };
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Cargar datos iniciales antes de procesar el envío del formulario
 
-
-    // Verificar si todos los campos están llenos antes de generar el certificado
-    if (CursoName && FechaInicio && imageDataURL) {
-
+    if (CursoName && FechaInicio && (digitalImageDataURL || physicalImageDataURL)) {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
+      
+      // Configuraciones de tamaño y fuente del canvas
+      canvas.width = 4677;
+      canvas.height = 3307;
 
-      canvas.width = 46770; // Ancho de tu imagen
-      canvas.height = 3307; // Alto de tu imagen
-
-      const img = new Image();
-      img.src = imageDataURL;  // Usar la imagen cargada por el usuario
-
-      // Función para formatear una fecha en el formato "dd de mm del aaaa"
       function formatearFechaInicio(fecha) {
         const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
         const partes = fecha.split('-');
@@ -100,169 +94,137 @@ const CertificateGenerator = () => {
         const dia = partes[2];
         return dia + ' de ' + mes;
       }
+
       function formatearFechaFin(fecha) {
         const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
         const partes = fecha.split('-');
-        const año = partes[0];
         const mes = meses[parseInt(partes[1], 10) - 1];
-        const dia = partes[2];
-        return dia + ' de ' + mes + ' del ' + año;
+        return `${partes[2]} de ${meses[mes]} del ${partes[0]}`;
       }
-      // Formatear las fechas de inicio y fin
+
       const fechaInicioFormateada = formatearFechaInicio(FechaInicio);
       const fechaFinFormateada = formatearFechaFin(FechaFin);
-      console.log(fechaInicioFormateada);
-      console.log(fechaFinFormateada);
 
-      img.onload = () => {
-        if (ctx) {
-          ctx.textAlign = 'justify';
-          ctx.drawImage(img, 0, 0);
+      const generateCertificate = (imageDataURL, type) => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = imageDataURL;
 
-          ctx.fillStyle = '#000000'; // Color del texto
-          ctx.font = '50px Arial'; // Fuente del nombre
-          ctx.textBaseline = 'top';
+          img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpiar el canvas antes de dibujar
+            ctx.drawImage(img, 0, 0);
+            ctx.fillStyle = '#000000';
+            ctx.font = '50px Arial';
+            ctx.textBaseline = 'top';
 
-          ctx.textAlign = "center";
-          ctx.font = 'bold 50px  Arial';
-          ctx.fillText(CursoName, 1300, 670);
-
-          ctx.textAlign = "center";
-          ctx.font = 'bold 65px Arial'; // 
-          ctx.fillText(ParticipanteName, 1300, 540);
-
-          ctx.textAlign = "center";
-          ctx.fillStyle = "white";
-          ctx.font = 'bold 25px Arial'; // 
-          ctx.fillText(Ponente, 300, 370);
-
-          ctx.textAlign = "center";
-          ctx.fillStyle = "white";
-          ctx.font = 'bold 30px Arial  ';
-          ctx.fillText(CodigoParticipante, 308, 1198);
-
-          //TEXTO DE ORGANIZACION, FECHAS Y HORAS
-          var tamanoFuente = 35; // Tamaño de fuente en píxeles
-          var textoCompleto = 'Cursito oganizado por la Corporación ECOMÁS, llevado a cabo desde el ' + fechaInicioFormateada + ' hasta el ' + fechaFinFormateada + ' con una duración de ' + HorasAcademicas + ' horas académicas.';
-          // Ancho máximo deseado para el texto
-          var anchoMaximo = 700;
-          // Función para dividir el texto en líneas según el ancho máximo
-          function dividirTextoEnLineas(texto, anchoMaximo) {
-            var palabras = texto.split(' ');
-            var lineas = [];
-            var lineaActual = palabras[0];
-            for (var i = 1; i < palabras.length; i++) {
-              var palabra = palabras[i];
-              var medida = ctx.measureText(lineaActual + ' ' + palabra);
-              if (medida.width < anchoMaximo) {
-                lineaActual += ' ' + palabra;
-              } else {
-                lineas.push(lineaActual);
-                lineaActual = palabra;
-              }
-            }
-            lineas.push(lineaActual);
-            return lineas;
-          }
-
-          // Obtener las líneas divididas
-          var lineas = dividirTextoEnLineas(textoCompleto, anchoMaximo);
-          var y = 800;
-          // Dibujar cada línea en el canvas
-          for (var i = 0; i < lineas.length; i++) {
+            // Dibujar textos en el canvas
             ctx.textAlign = "center";
-            ctx.font = '40px Arial bold'; // 
+            ctx.font = 'bold 50px Arial';
+            ctx.fillText(CursoName, 1300, 670);
+
+            ctx.font = 'bold 65px Arial';
+            ctx.fillText(ParticipanteName, 1300, 540);
+
             ctx.fillStyle = "black";
+            ctx.font = 'bold 25px Arial';
+            ctx.fillText(Ponente, 300, 370);
 
-            ctx.fillText(lineas[i], 1300, y);
-            y += tamanoFuente + 5; // Espacio vertical entre líneas
-          }
-          //TEMARIO -----------------------------------------------------------------------
-          // Ancho máximo permitido para el texto
-          var anchoMaximo = 400; // Ajusta este valor según tus necesidades
+            ctx.font = 'bold 30px Arial';
+            ctx.fillText(CodigoParticipante, 308, 1198);
 
-          ctx.fillStyle = "white";
-          ctx.textAlign = "left";
-          ctx.font = '25px bold Arial';
-          var palabras = Temario.split('\n');
+            // Dividir y dibujar texto de organización, fechas y horas
+            const textoCompleto = `Cursito organizado por la Corporación ECOMÁS, llevado a cabo desde el ${fechaInicioFormateada} hasta el ${fechaFinFormateada} con una duración de ${HorasAcademicas} horas académicas.`;
+            const lineas = dividirTextoEnLineas(textoCompleto, 700, ctx);
+            let y = 800;
 
-          var x = 110; // Posición x inicial
-          var y = 485; // Posición y inicial
-
-          palabras.forEach(function (linea, index) {
-            // Dividir la línea en palabras
-            var palabrasLinea = linea.split(' ');
-            var lineaActual = '';
-            palabrasLinea.forEach(function (palabra, index) {
-              // Medir el ancho de la línea actual con la palabra actual agregada
-              var anchoLinea = ctx.measureText(lineaActual + palabra).width;
-              // Si la línea actual excede el ancho máximo permitido, dibujar la línea actual y pasar a la siguiente línea
-              if (anchoLinea > anchoMaximo) {
-                ctx.fillText(lineaActual, x, y);
-                y += 40; // Incrementar la posición y para el salto de línea
-                // Reiniciar la línea actual con la palabra actual
-                lineaActual = palabra + ' ';
-              } else {
-                // Agregar la palabra actual a la línea actual
-                lineaActual += palabra + ' ';
-              }
+            lineas.forEach(linea => {
+              ctx.fillText(linea, 1300, y);
+              y += 40;
             });
-            // Dibujar la última línea actual
-            ctx.fillText(lineaActual, x, y);
-            y += 40; // Incrementar la posición y para el salto de línea
-          });
 
-          // Resto del código para dibujar el certificado...
-          const imageDataURL = canvas.toDataURL('image/jpeg');
+            // Dibujar temario
+            const palabras = Temario.split('\n');
+            let x = 110;
+            y = 485;
 
-          // Guardar el certificado en la tabla de certificados generados
-          let certificateType; // Variable para almacenar el tipo de certificado
-          switch (selectedImageType) {
-            case 'tipo1':
-              certificateType = 'certificadoDigital';
-              break;
-            case 'tipo2':
-              certificateType = 'certificadoFisico';
-              break;
-            case 'tipo3':
-              certificateType = 'certificadoOnly';
-              break;
-            default:
-              throw new Error('No se ha seleccionado ningún tipo de certificado.'); // Lanzar un error si no se selecciona ningún tipo
-          }
+            palabras.forEach(linea => {
+              const palabrasLinea = linea.split(' ');
+              let lineaActual = '';
 
-          // Modificar la llamada al método add para incluir el nombre del participante en ownerName
-          imageDB.certificates.add({ certificateDataURL: imageDataURL, type: certificateType, ownerName: ParticipanteName }).then(() => {
-            // O simplemente mostrar un mensaje de éxito
-            console.log(imageDataURL);
-            alert('¡Certificado generado exitosamente!');
-          }).catch(error => {
-            console.error('Error al guardar el certificado en la base de datos:', error);
-          });
-          // Redireccionar a otra página o realizar otra acción
-          window.location.href = '/cursos'; // Redireccionar a otra página
-        } else {
-          // Crear un array con los nombres de los campos que faltan
-          const camposFaltantes = [];
-          if (!CursoName) camposFaltantes.push('Nombre del curso');
-          if (!FechaInicio) camposFaltantes.push('Fecha de inicio');
-          if (!FechaFin) camposFaltantes.push('Fecha de finalización');
-          if (!Ponente) camposFaltantes.push('Ponente');
-          if (!Temario) camposFaltantes.push('Temario');
-          if (!HorasAcademicas) camposFaltantes.push('Horas académicas');
-          if (!ParticipanteName) camposFaltantes.push('Nombre del participante');
-          if (!CodigoParticipante) camposFaltantes.push('Código del participante');
-          if (!imageDataURL) camposFaltantes.push('Imagen');
+              palabrasLinea.forEach(palabra => {
+                if (ctx.measureText(lineaActual + palabra).width > 400) {
+                  ctx.fillText(lineaActual, x, y);
+                  y += 40;
+                  lineaActual = palabra + ' ';
+                } else {
+                  lineaActual += palabra + ' ';
+                }
+              });
+              ctx.fillText(lineaActual, x, y);
+              y += 40;
+            });
 
-          alert(`Por favor completa los siguientes campos antes de generar el certificado: ${camposFaltantes.join(', ')}.`);
-        }
+            // Convertir el canvas a dataURL y resolver la promesa
+            const certificateDataURL = canvas.toDataURL('image/jpeg');
+            resolve({ certificateDataURL, type, ownerName: ParticipanteName });
+          };
+
+          img.onerror = (error) => {
+            reject(error);
+          };
+        });
       };
+
+      const certificatesToSave = [];
+
+      if (selectedImageType === 'tipo4') {
+        if (digitalImageDataURL) {
+          certificatesToSave.push(generateCertificate(digitalImageDataURL, 'certificadoDigital'));
+        }
+        if (physicalImageDataURL) {
+          certificatesToSave.push(generateCertificate(physicalImageDataURL, 'certificadoFisico'));
+        }
+      } else {
+        alert('No se ha seleccionado ningún tipo de certificado.');
+        return;
+      }
+
+      Promise.all(certificatesToSave)
+        .then(certificates => Promise.all(certificates.map(cert => imageDB.certificates.add(cert))))
+        .then(() => {
+          alert('¡Certificado generado exitosamente!');
+          window.location.href = '/cursos';
+        })
+        .catch(error => {
+          console.error('Error al guardar el certificado en la base de datos:', error);
+        });
+    } else {
+      alert('Por favor completa todos los campos antes de generar el certificado.');
     }
-  }
+  };
+
+  const dividirTextoEnLineas = (texto, maxWidth, ctx) => {
+    const words = texto.split(' ');
+    const lines = [];
+    let currentLine = words[0];
+
+    for (let i = 1; i < words.length; i++) {
+      const word = words[i];
+      const width = ctx.measureText(currentLine + ' ' + word).width;
+      if (width < maxWidth) {
+        currentLine += ' ' + word;
+      } else {
+        lines.push(currentLine);
+        currentLine = word;
+      }
+    }
+    lines.push(currentLine);
+    return lines;
+  };
+
   return (
     <div>
       <form method="dialog" onSubmit={handleSubmit}>
-
         <label className='input input-bordered flex items-center mb-4' htmlFor="CursoName">
           <input
             placeholder="Nombre del curso"
@@ -272,7 +234,6 @@ const CertificateGenerator = () => {
             onChange={(e) => setCursoName(e.target.value)}
           />
         </label>
-
         <label className='input input-bordered flex items-center mb-4' htmlFor="FechaInicio">
           <input
             placeholder="Fecha de inicio"
@@ -282,17 +243,15 @@ const CertificateGenerator = () => {
             onChange={(e) => setFechaInicio(e.target.value)}
           />
         </label>
-
         <label className='input input-bordered flex items-center mb-4' htmlFor="FechaFin">
           <input
-            placeholder="Fecha de finalización"
+            placeholder="Fecha de fin"
             type="date"
             id="FechaFin"
             value={FechaFin}
             onChange={(e) => setFechaFin(e.target.value)}
           />
         </label>
-
         <label className='input input-bordered flex items-center mb-4' htmlFor="Ponente">
           <input
             placeholder="Ponente"
@@ -302,13 +261,12 @@ const CertificateGenerator = () => {
             onChange={(e) => setPonente(e.target.value)}
           />
         </label>
-        <label className=' flex items-center mb-4 w-full' htmlFor="Temario">
-          <textarea id="Temario" onChange={(e) => setTemario(e.target.value)} value={Temario} className="textarea textarea-bordered textarea-sm w-full h-36" ></textarea>
-
+        <label className='flex items-center mb-4 w-full' htmlFor="Temario">
+          <textarea id="Temario" onChange={(e) => setTemario(e.target.value)} value={Temario} className="textarea textarea-bordered textarea-sm w-full h-36"></textarea>
         </label>
         <label className='input input-bordered flex items-center mb-4' htmlFor="HorasAcademicas">
           <input
-            placeholder="HorasAcademicas"
+            placeholder="HorasAcadémicas"
             type="text"
             id="HorasAcademicas"
             value={HorasAcademicas}
@@ -317,7 +275,7 @@ const CertificateGenerator = () => {
         </label>
         <label className='input input-bordered flex items-center mb-4' htmlFor="ParticipanteName">
           <input
-            placeholder="ParticipanteName"
+            placeholder="Nombre del participante"
             type="text"
             id="ParticipanteName"
             value={ParticipanteName}
@@ -326,23 +284,19 @@ const CertificateGenerator = () => {
         </label>
         <label className='input input-bordered flex items-center mb-4' htmlFor="CodigoParticipante">
           <input
-            placeholder="CodigoParticipante"
+            placeholder="Código del participante"
             type="text"
             id="CodigoParticipante"
             value={CodigoParticipante}
             onChange={(e) => setCodigoParticipante(e.target.value)}
           />
         </label>
-        {/* Agregar select para elegir el tipo de imagen */}
         <select className='select select-bordered w-full mb-4' id="imageType" value={selectedImageType} onChange={(e) => setSelectedImageType(e.target.value)}>
           <option defaultValue>Seleccionar tipo de certificado</option>
-          <option value="tipo1">Certificado Digital</option>
-          <option value="tipo2">Certificado Físico</option>
-          <option value="tipo3">Certificado Solo Empresa</option>
+          <option value="tipo4">Diplomado Físico</option>
         </select>
         <button className="btn w-full" type="submit" disabled={submitButtonDisabled}>Generar Certificado</button>
       </form>
-
     </div>
   );
 };

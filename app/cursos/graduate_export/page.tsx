@@ -151,6 +151,32 @@ export default function Home() {
     }
   };
 
+  const exportarPDFManual = () => {
+    const pdf = new jsPDF("landscape");
+    const certificates = digitalCertificates.concat(physicalCertificates);
+  
+    certificates.forEach((certificate, index) => {
+      if (index > 0) {
+        pdf.addPage();
+      }
+      const width = pdf.internal.pageSize.getWidth();
+      const height = pdf.internal.pageSize.getHeight();
+      pdf.addImage(
+        certificate.certificateDataURL,
+        "JPEG",
+        0,
+        0,
+        width,
+        height,
+        "",
+        "SLOW"
+      );
+    });
+  
+    // Guardar el archivo PDF y abrir la ventana de descarga
+    pdf.save("certificados.pdf");
+  };
+  
   return (
     <div className="bg-gray-500 h-screen overflow-hidden">
       <header className="mt-8 text-center">
@@ -161,6 +187,11 @@ export default function Home() {
           </li>
           <li className="step step-info">
             <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
+          </li>
+          <li className="step step-info">
+            <Link href="/cursos/cert_soloemp" passHref>
+              Exportar en PDF
+            </Link>
           </li>
           <li className="step step-info">
             <Link href="/cursos/cert_soloemp" passHref>
@@ -180,12 +211,18 @@ export default function Home() {
                   className="w-full btn bg-blue-500 text-white hover:bg-slate-200 mt-2"
                   onClick={exportarPDF}
                 >
-                  Exportar en PDF
+                  Exportar en PDF (Excel)
+                </button>
+                <button
+                  className="w-full btn bg-blue-500 text-white hover:bg-slate-200 mt-2"
+                  onClick={exportarPDFManual}
+                >
+                  Exportar en PDF (Manual)
                 </button>
               </li>
               <li>
                 <div className="join grid grid-cols-2 mt-3 ">
-                  <Link href="/cursos/cert_phisyc" passHref legacyBehavior>
+                  <Link href="/cursos/graduate_reverso" passHref legacyBehavior>
                     <button className="join-item bg-slate-200 btn btn-outline text-gray-900">
                       Retroceder
                     </button>

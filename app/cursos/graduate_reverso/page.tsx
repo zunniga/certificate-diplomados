@@ -184,7 +184,7 @@ export default function Home() {
                       Retroceder
                     </button>
                   </Link>
-                  <Link href="/cursos/cert_export" passHref legacyBehavior>
+                  <Link href="/cursos/graduate_export" passHref legacyBehavior>
                     <button className="join-item bg-slate-200 text-gray-900 btn">
                       Avanzar
                     </button>
