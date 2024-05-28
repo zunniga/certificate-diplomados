@@ -21,6 +21,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "electron/**/*", "Components/WriteOnImage.tsxxxx", "Components/UploadExcel.jsx", "Components/CertificateGenerator.jsx", "Components/ImageUploaderDB.jsx", "Components/ImageUploaderDB.jsx", "Components/ReadExcelParticipants.jsx", "Components/CertificateGeneratorExcel.jsx", "app/api/apiPdf/route.ts", ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "electron/**/*", "Components/WriteOnImage.tsxxxx", "Components/UploadExcel.jsx", "Components/CertificateGenerator.jsx", "Components/ImageUploaderDB.jsx", "Components/ImageUploaderDB.jsx", "Components/ReadExcelParticipants.jsx", "Components/CertificateGeneratorExcel.jsx", "app/api/apiPdf/route.ts", "app/api/apiPdf/route.js", ],
   "exclude": ["node_modules"]
 }
