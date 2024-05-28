@@ -174,7 +174,7 @@ export default function Home() {
     });
   
     // Guardar el archivo PDF y abrir la ventana de descarga
-    pdf.save("certificados.pdf");
+    pdf.save("Diplomado.pdf");
   };
   
   return (
@@ -199,6 +199,7 @@ export default function Home() {
             </Link>
           </li>
         </ul>
+        
       </header>
       <div className="bg-gray-500 flex h-full">
         {/* Contenedor Principal */}

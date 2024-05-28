@@ -7,9 +7,10 @@ const CertificateGenerator = () => {
   const [CursoName, setCursoName] = useState('');
   const [FechaInicio, setFechaInicio] = useState('');
   const [FechaFin, setFechaFin] = useState('');
-  const [Ponente, setPonente] = useState('');
-  const [Temario, setTemario] = useState('');
-  const [HorasAcademicas, setHorasAcademicas] = useState('');
+  const [NotaParcial, setNotaParcial] = useState('');
+  const [NotaFinal, setNotaFinal] = useState('');
+  const [Promedio, setPromedio] = useState('');
+  const [Resolucion, setResolucion] = useState('');
   const [ParticipanteName, setParticipanteName] = useState('');
   const [CodigoParticipante, setCodigoParticipante] = useState('');
   const [digitalImageDataURL, setDigitalImageDataURL] = useState(null);
@@ -18,8 +19,7 @@ const CertificateGenerator = () => {
   const [selectedImageType, setSelectedImageType] = useState('');
 
   useEffect(() => {
-    const textarea = document.getElementById('Temario');
-    textarea.placeholder = "Temario (Cada tema separado por un salto de línea) \nTema 1 \nTema 2 \nTema 3";
+   
   }, []);
 
   const checkFields = () => {
@@ -27,9 +27,10 @@ const CertificateGenerator = () => {
       CursoName &&
       FechaInicio &&
       FechaFin &&
-      Ponente &&
-      Temario &&
-      HorasAcademicas &&
+      NotaParcial &&
+      NotaFinal &&
+      Promedio &&
+      Resolucion &&
       ParticipanteName &&
       CodigoParticipante &&
       selectedImageType
@@ -42,7 +43,7 @@ const CertificateGenerator = () => {
 
   useEffect(() => {
     checkFields();
-  }, [CursoName, FechaInicio, FechaFin, Ponente, Temario, HorasAcademicas, ParticipanteName, CodigoParticipante, digitalImageDataURL, physicalImageDataURL]);
+  }, [CursoName,NotaParcial ,NotaFinal ,Promedio , FechaInicio, FechaFin, Resolucion, ParticipanteName, CodigoParticipante, digitalImageDataURL, physicalImageDataURL]);
 
   useEffect(() => {
     loadSelectedImages();
@@ -124,6 +125,9 @@ const CertificateGenerator = () => {
 
             ctx.font = 'bold 65px Arial';
             ctx.fillText(ParticipanteName, 1300, 540);
+
+            ctx.font = 'bold 65px Arial';
+            ctx.fillText(Resolucion, 700, 540);
 
             ctx.fillStyle = "black";
             ctx.font = 'bold 25px Arial';
@@ -225,7 +229,8 @@ const CertificateGenerator = () => {
   return (
     <div>
       <form method="dialog" onSubmit={handleSubmit}>
-        <label className='input input-bordered flex items-center mb-4' htmlFor="CursoName">
+        <div className=' text-center bg-slate-900 border border-zinc-950 rounded-md mb-4 p-2 '> ANVERSO DEL DIPLOMADO </div>
+      <label className='input input-bordered flex items-center mb-4' htmlFor="CursoName">
           <input
             placeholder="Nombre del curso"
             type="text"
@@ -234,46 +239,7 @@ const CertificateGenerator = () => {
             onChange={(e) => setCursoName(e.target.value)}
           />
         </label>
-        <label className='input input-bordered flex items-center mb-4' htmlFor="FechaInicio">
-          <input
-            placeholder="Fecha de inicio"
-            type="date"
-            id="FechaInicio"
-            value={FechaInicio}
-            onChange={(e) => setFechaInicio(e.target.value)}
-          />
-        </label>
-        <label className='input input-bordered flex items-center mb-4' htmlFor="FechaFin">
-          <input
-            placeholder="Fecha de fin"
-            type="date"
-            id="FechaFin"
-            value={FechaFin}
-            onChange={(e) => setFechaFin(e.target.value)}
-          />
-        </label>
-        <label className='input input-bordered flex items-center mb-4' htmlFor="Ponente">
-          <input
-            placeholder="Ponente"
-            type="text"
-            id="Ponente"
-            value={Ponente}
-            onChange={(e) => setPonente(e.target.value)}
-          />
-        </label>
-        <label className='flex items-center mb-4 w-full' htmlFor="Temario">
-          <textarea id="Temario" onChange={(e) => setTemario(e.target.value)} value={Temario} className="textarea textarea-bordered textarea-sm w-full h-36"></textarea>
-        </label>
-        <label className='input input-bordered flex items-center mb-4' htmlFor="HorasAcademicas">
-          <input
-            placeholder="HorasAcadémicas"
-            type="text"
-            id="HorasAcademicas"
-            value={HorasAcademicas}
-            onChange={(e) => setHorasAcademicas(e.target.value)}
-          />
-        </label>
-        <label className='input input-bordered flex items-center mb-4' htmlFor="ParticipanteName">
+      <label className='input input-bordered flex items-center mb-4' htmlFor="ParticipanteName">
           <input
             placeholder="Nombre del participante"
             type="text"
@@ -291,12 +257,94 @@ const CertificateGenerator = () => {
             onChange={(e) => setCodigoParticipante(e.target.value)}
           />
         </label>
+        <label className='input input-bordered flex items-center mb-4' htmlFor="Resolucion">
+          <input
+            placeholder="Resolucion"
+            type="text"
+            id="Resolucion"
+            value={Resolucion}
+            onChange={(e) => setResolucion(e.target.value)}
+          />
+         </label>
+        <label className='input input-bordered flex items-center mb-4' htmlFor="FechaInicio">
+          <input
+            placeholder="Fecha de inicio"
+            type="date"
+            id="FechaInicio"
+            value={FechaInicio}
+            onChange={(e) => setFechaInicio(e.target.value)}
+          />
+        </label>
+        <label className='input input-bordered flex items-center mb-4' htmlFor="FechaFin">
+          <input
+            placeholder="Fecha de fin"
+            type="date"
+            id="FechaFin"
+            value={FechaFin}
+            onChange={(e) => setFechaFin(e.target.value)}
+          />
+        </label> 
+       
+
+        <div className=' text-center bg-slate-900 border border-zinc-950 rounded-md mb-4 p-2 '> REVERSO DEL DIPLOMADO </div>
+      <label className='input input-bordered flex items-center mb-4' htmlFor="CursoName">
+          <input
+            placeholder="Nombre del curso"
+            type="text"
+            id="CursoName"
+            value={CursoName}
+            onChange={(e) => setCursoName(e.target.value)}
+          />
+        </label>
+        <label className='input input-bordered flex items-center mb-4' htmlFor="CodigoParticipante">
+          <input
+            placeholder="Código del participante"
+            type="text"
+            id="CodigoParticipante"
+            value={CodigoParticipante}
+            onChange={(e) => setCodigoParticipante(e.target.value)}
+          />
+        </label>
+      <label className='input input-bordered flex items-center mb-4' htmlFor="NotaParcial">
+          <input
+            placeholder="Nota Parcial"
+            type="text"
+            id="NotaParcial"
+            value={NotaParcial}
+            onChange={(e) => setNotaParcial(e.target.value)}
+          />
+        </label>
+
+        <label className='input input-bordered flex items-center mb-4' htmlFor="NotaFinal">
+          <input
+            placeholder="Nota Final"
+            type="text"
+            id="NotaFinal"
+            value={NotaFinal}
+            onChange={(e) => setNotaFinal(e.target.value)}
+          />
+        </label>
+
+        <label className='input input-bordered flex items-center mb-4' htmlFor="Promedio">
+          <input
+            placeholder="Promedio"
+            type="text"
+            id="Promedio"
+            value={Promedio}
+            onChange={(e) => setPromedio(e.target.value)}
+          />
+        </label>
+       
+      
         <select className='select select-bordered w-full mb-4' id="imageType" value={selectedImageType} onChange={(e) => setSelectedImageType(e.target.value)}>
           <option defaultValue>Seleccionar tipo de certificado</option>
           <option value="tipo4">Diplomado Físico</option>
         </select>
+
+      
         <button className="btn w-full" type="submit" disabled={submitButtonDisabled}>Generar Certificado</button>
       </form>
+
     </div>
   );
 };
