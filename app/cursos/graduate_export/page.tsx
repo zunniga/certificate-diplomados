@@ -4,6 +4,7 @@ import Link from "next/link";
 import jsPDF from "jspdf";
 import { ImageDatabase } from "@/Components/ImageUploaderDB";
 
+
 const imageDB = new ImageDatabase();
 
 interface Certificate {
@@ -155,6 +156,11 @@ export default function Home() {
     const pdf = new jsPDF("landscape");
     const certificates = digitalCertificates.concat(physicalCertificates);
   
+    if (certificates.length === 0) {
+      alert("No realizaste ninguna inserción manual");
+      return;
+    }
+  
     certificates.forEach((certificate, index) => {
       if (index > 0) {
         pdf.addPage();
@@ -172,7 +178,6 @@ export default function Home() {
         "SLOW"
       );
     });
-  
     // Guardar el archivo PDF y abrir la ventana de descarga
     pdf.save("Diplomado.pdf");
   };
@@ -193,11 +198,7 @@ export default function Home() {
               Exportar en PDF
             </Link>
           </li>
-          <li className="step step-info">
-            <Link href="/cursos/cert_soloemp" passHref>
-              Exportar en PDF
-            </Link>
-          </li>
+         
         </ul>
         
       </header>
@@ -221,6 +222,7 @@ export default function Home() {
                   Exportar en PDF (Manual)
                 </button>
               </li>
+              
               <li>
                 <div className="join grid grid-cols-2 mt-3 ">
                   <Link href="/cursos/graduate_reverso" passHref legacyBehavior>

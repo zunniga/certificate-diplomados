@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ImageDatabase } from "./ImageUploaderDB"; // Importa la clase ImageDatabase
-import {
-  IngenieriaCivil,
-  IngenieriaPuentes,
-} from "@/Components/utils/modulares";
+
 
 const CertificateGenerator = () => {
   const [CursoName, setCursoName] = useState("");

@@ -179,23 +179,7 @@ export default function Home() {
                   onDeleteData={updateButton}
                 />
               </li>
-              <li>
-                <button
-                  className="w-full btn bg-sky-700 text-white hover:bg-gray-200 mt-2"
-                  onClick={toggleLista}
-                >
-                  Lista de Modulares
-                </button>
-                {listaAbierta && (
-                  <ul>
-                    <li>Opción 1</li>
-                    <li>Opción 2</li>
-                    <li>Opción 3</li>
-                    {/* Puedes agregar más opciones aquí */}
-                  </ul> 
-                )}
-              </li>
-
+             
               <li className="join grid grid-cols-2 mt-3 ">
                 <button
                   onClick={goPrevious}
