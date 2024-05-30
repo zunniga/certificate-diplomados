@@ -23,21 +23,12 @@ const CertificateGenerator = () => {
 
   const imageDB = new ImageDatabase();
 
-  const [selectedModular, setSelectedModular] = useState("");
-  const [selectedModularContent, setSelectedModularContent] = useState("");
+  
+
+  const [selectedModularContent, setSelectedModularContent] = useState('');
 
   const handleModularChange = (e) => {
-    const selectedValue = e.target.value;
-    setSelectedModular(selectedValue);
-
-    // Determinar el contenido correspondiente según la selección
-    if (selectedValue === "Ingenieria Civil") {
-      setSelectedModularContent(IngenieriaCivil.join("\n"));
-    } else if (selectedValue === "Ingenieria Puentes") {
-      setSelectedModularContent(IngenieriaPuentes.join("\n"));
-    } else {
-      setSelectedModularContent(""); // Si no hay selección válida, establecer el contenido como vacío
-    }
+    setSelectedModularContent(e.target.value);
   };
 
   const loadSelectedImages = async () => {
@@ -88,7 +79,7 @@ const CertificateGenerator = () => {
   const checkFields = () => {
     if (
       CursoName &&
-      selectedModular &&
+      selectedModularContent &&
       FechaInicio &&
       FechaFin &&
       ParticipanteName &&
@@ -109,9 +100,9 @@ const CertificateGenerator = () => {
     checkFields();
   }, [
     CursoName,
-    selectedModular,
     FechaInicio,
     FechaFin,
+   
     ParticipanteName,
     Resolucion,
     CodigoParticipante,
@@ -126,7 +117,7 @@ const CertificateGenerator = () => {
     checkFields();
   }, [
     CursoName,
-    selectedModular,
+    selectedModularContent,
     FechaInicio,
     FechaFin,
     ParticipanteName,
@@ -333,51 +324,77 @@ const CertificateGenerator = () => {
               ctx.fillText(NotaFinal, 4220, 2150);
 
        // Configurar el fuente y el tamaño del texto
-ctx.font = "50px Futura Bk BT"; // Tipo de letra "Futura Bk BT" y tamaño de 50px
-ctx.fillStyle = "black"; // Color del texto negro
-
-// Dividir el contenido en líneas
-var lineas = selectedModularContent.split("\n");
-
-// Calcular el ancho máximo de los números romanos
-var anchoMaximoNumeros = ctx.measureText("XII.").width;
-
-// Definir un ancho máximo predefinido para el texto
-var anchoMaximo = 1200;
-
-// Definir una altura estimada por línea de texto
-var alturaLinea = 70;
-
-// Calcular la altura total de la lista
-var alturaTotal = lineas.length * alturaLinea;
-
-// Calcular la posición inicial en Y para centrar la lista verticalmente
-var yInicial = (canvas.height - alturaTotal) / 2;
-
-// Calcular la posición inicial en X para centrar el texto horizontalmente
-var xInicial = (canvas.width - anchoMaximo) / 2;
-
-// Renderizar cada línea de la lista
-lineas.forEach(function(linea, indice) {
-    var y = yInicial + (indice * alturaLinea); // Espacio vertical entre líneas
-
-    // Obtener el número romano de la línea
-    var numeroRomano = linea.match(/^([IVXLCDM]+)\./);
-    if (numeroRomano) {
-        // Calcular el espacio necesario para el número romano
-        var anchoNumero = ctx.measureText(numeroRomano[0]).width;
-        // Calcular la posición inicial en X del texto
-        var x = xInicial + (anchoMaximoNumeros - anchoNumero);
-        // Renderizar el número romano
-        ctx.fillText(numeroRomano[0], x, y);
-        // Renderizar el resto del texto
-        ctx.fillText(linea.slice(numeroRomano[0].length).trim(), xInicial + anchoMaximoNumeros + 20, y);
-    } else {
-        // Si no hay número romano, renderizar el texto completo
-        ctx.fillText(linea.trim(), xInicial, y);
-    }
-});
-
+       var textoCompleto = selectedModularContent;
+       var anchoMaximo = 4700;
+       var tamanoFuente = 50; // Tamaño de la fuente en píxeles
+       var margenHorizontal = 450; // Margen horizontal entre el título del módulo y el texto del módulo
+       var margenIzquierdo = 1950; // Margen izquierdo para el texto
+       var margenSeparacion = -7; // Margen vertical entre el título y el texto
+       
+       // Función para convertir un número a números romanos (hasta 15)
+       function convertirARomanos(num) {
+         if (num < 1 || num > 15) return ""; // Asegurar que el número esté en el rango 1-15
+         var romanos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
+         return romanos[num - 1];
+       }
+       
+       // Función para dividir el texto en módulos según el carácter de viñeta
+       function dividirTextoEnModulos(texto) {
+         return texto.split("• ").filter(Boolean); // Divide el texto donde encuentra "• " y filtra entradas vacías
+       }
+       
+       // Función para dividir cada módulo en líneas según el ancho máximo
+       function dividirTextoEnLineas(texto, anchoMaximo) {
+         var palabras = texto.split(" ");
+         var lineas = [];
+         var lineaActual = palabras[0];
+         for (var i = 1; i < palabras.length; i++) {
+           var palabra = palabras[i];
+           var medida = ctx.measureText(lineaActual + " " + palabra);
+           if (medida.width < anchoMaximo) {
+             lineaActual += " " + palabra;
+           } else {
+             lineas.push(lineaActual);
+             lineaActual = palabra;
+           }
+         }
+         lineas.push(lineaActual);
+         return lineas;
+       }
+       
+       var modulos = dividirTextoEnModulos(textoCompleto);
+       var cantidadModulos = Math.min(modulos.length, 15); // Obtener la cantidad de módulos (limitado a 15)
+       
+       var yInicial = 1730; // Posición inicial en Y
+       var alturaCanvas = 2650; // Altura total del canvas (ejemplo)
+       var alturaDisponible = alturaCanvas - yInicial;
+       var alturaModulo = alturaDisponible / cantidadModulos; // Altura equitativa para cada módulo
+       
+       // Dibujar cada módulo en el canvas
+       for (var i = 0; i < cantidadModulos; i++) {
+         var tituloModulo = `Módulo ${convertirARomanos(i + 1)}`; // Convertir el número a romano
+         var textoModulo = modulos[i].trim();
+       
+         // Calcular las posiciones horizontales para el título y el texto del módulo
+         var xTitulo = margenIzquierdo;
+         var xTexto = margenIzquierdo + margenHorizontal;
+       
+         // Posiciones verticales
+         var yBase = yInicial + (i * alturaModulo); // Base del módulo
+         var yTitulo = yBase + (alturaModulo / 4); // Título a 1/4 del módulo desde la base
+         var yTexto = yBase + (alturaModulo / 4); // Texto a 1/2 del módulo desde la base
+        
+         // Establecer la fuente y el color del texto del título del módulo
+         ctx.textAlign = "left";
+         ctx.font = `${tamanoFuente}px Futura Bk BT`;
+         ctx.fillStyle = "black";
+       
+         // Renderizar el título del módulo
+         ctx.fillText(tituloModulo, xTitulo, yTitulo);
+       
+         // Renderizar el texto del módulo
+         ctx.fillText(textoModulo, xTexto, yTexto);
+       }
 
 
 
@@ -570,20 +587,16 @@ lineas.forEach(function(linea, indice) {
           />
         </label>
 
-        <select
-          className="select select-bordered w-full mb-4"
+       
+        <label className='flex items-center mb-4 w-full'>
+        <textarea
           id="modularType"
-          value={selectedModular}
+          value={selectedModularContent}
           onChange={handleModularChange}
-        >
-          <option defaultValue>Seleccionar los modulares del diplomado</option>
-          <option value="Ingenieria Civil">
-            Modulares de Ingenieria Civil
-          </option>
-          <option value="Ingenieria Puentes">
-            Modulares de Ingenieria Puentes
-          </option>
-        </select>
+          className="textarea textarea-bordered textarea-sm w-full h-36"
+          placeholder="Ingresa los Módulos correspondientes al diplomado"
+        ></textarea>
+      </label>
 
         <label
           className="input input-bordered flex items-center mb-4"
