@@ -76,7 +76,7 @@ const CertificateGeneratorExcel = ({
 
       // Obtener el array selectedCertificates del localStorage
       const selectedCertificates = JSON.parse(
-        localStorage.getItem("selectedCertificates")
+        sessionStorage.getItem("selectedCertificates")
       );
       console.log("Tipos de certificados seleccionados:", selectedCertificates);
 

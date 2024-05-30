@@ -144,10 +144,10 @@ export default function Home() {
         }
       }
 
-      alert("Datos enviados correctamente a la API.");
+      alert("Datos Guardados Correctamente!");
     } catch (error) {
       console.error("Error al enviar los datos a la API:", error);
-      alert("Error al enviar los datos a la API.");
+      alert("Error al enviar los datos.");
     }
   };
 

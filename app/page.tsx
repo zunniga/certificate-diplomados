@@ -11,7 +11,7 @@ export default function Home({ }: HomeProps) {
 
   // Cargar el estado inicial desde el localStorage al inicio
   useEffect(() => {
-    const storedCertificates = localStorage.getItem('selectedCertificates');
+    const storedCertificates = sessionStorage.getItem('selectedCertificates');
     if (storedCertificates) {
       setSelectedCertificates(JSON.parse(storedCertificates));
     }
@@ -32,7 +32,7 @@ export default function Home({ }: HomeProps) {
 
   // Actualizar el localStorage cuando selectedCertificates cambia
   useEffect(() => {
-    localStorage.setItem('selectedCertificates', JSON.stringify(selectedCertificates));
+    sessionStorage.setItem('selectedCertificates', JSON.stringify(selectedCertificates));
   }, [selectedCertificates]);
 
   // Función para manejar el clic en el botón
