@@ -62,7 +62,7 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-cyan-600 flex flex-col items-center justify-center h-screen">
+    <main className="bg-[#001d51] flex flex-col items-center justify-center h-screen">
       {/* Botón del icono en la esquina superior derecha */}
       <Link href="/">
         <IoIosExit
