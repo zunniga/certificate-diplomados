@@ -364,7 +364,7 @@ const generateCertificate = async (participant, imageDataURL) => {
 
       ctx.textAlign = "center";
       ctx.font = "bold 80px Futura Bk BT ";
-      ctx.fillText(participant.Promedio, 4190, 2980);
+      ctx.fillText(participant.Promedio, 4170, 2970);
 
       ctx.textAlign = "center";
       ctx.fillStyle = "black ";

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import jsPDF from "jspdf";
 import { ImageDatabase } from "@/Components/ImageUploaderDB";
+import ParticipanteName from "@/Components/CertificateGenerator";
 
 
 const imageDB = new ImageDatabase();
@@ -163,8 +164,9 @@ export default function Home() {
   
     certificates.forEach((certificate, index) => {
       if (index > 0) {
-        pdf.addPage();
+        pdf.addPage(); // Agrega una nueva página para cada certificado, excepto el primero
       }
+  
       const width = pdf.internal.pageSize.getWidth();
       const height = pdf.internal.pageSize.getHeight();
       pdf.addImage(
@@ -178,9 +180,17 @@ export default function Home() {
         "SLOW"
       );
     });
-    // Guardar el archivo PDF y abrir la ventana de descarga
-    pdf.save("Diplomado.pdf");
+  
+    // Obtener el nombre del primer participante (si hay alguno)
+    const primerParticipante = certificates[0].ownerName;
+    const fileName = primerParticipante ? `Diplomado_${primerParticipante}.pdf` : "Diplomado.pdf";
+  
+    // Guardar el PDF una vez que se hayan agregado todas las imágenes
+    pdf.save(fileName);
   };
+  
+  
+  
   
   return (
     <div className="bg-gray-500 h-screen overflow-hidden">

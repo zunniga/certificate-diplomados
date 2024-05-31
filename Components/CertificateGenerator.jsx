@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ImageDatabase } from "./ImageUploaderDB"; // Importa la clase ImageDatabase
 
-
 const CertificateGenerator = () => {
   const [CursoName, setCursoName] = useState("");
   const [FechaInicio, setFechaInicio] = useState("");
@@ -20,9 +19,7 @@ const CertificateGenerator = () => {
 
   const imageDB = new ImageDatabase();
 
-  
-
-  const [selectedModularContent, setSelectedModularContent] = useState('');
+  const [selectedModularContent, setSelectedModularContent] = useState("");
 
   const handleModularChange = (e) => {
     setSelectedModularContent(e.target.value);
@@ -99,7 +96,7 @@ const CertificateGenerator = () => {
     CursoName,
     FechaInicio,
     FechaFin,
-   
+    selectedModularContent,
     ParticipanteName,
     Resolucion,
     CodigoParticipante,
@@ -289,18 +286,23 @@ const CertificateGenerator = () => {
                 ctx.fillStyle = "black";
 
                 partes.forEach((parte) => {
+                  // Establece la fuente dependiendo del valor de 'parte'
                   var font =
                     parte === CursoName ||
                     parte === "420 horas académicas" ||
                     parte === "26 créditos"
-                      ? "bold 65px Century Gothic" // Cambio de fuente y tamaño
-                      : "65px Century Gothic"; // Cambio de fuente y tamaño
+                      ? "bold 65px Century Gothic" // Fuente en negrita y tamaño 65px
+                      : "65px Century Gothic"; // Fuente normal y tamaño 65px
                   ctx.font = font;
 
+                  // Agrega comillas a CursoName si es necesario
                   var textToDraw =
-                    parte === CursoName ? parte.toUpperCase() : parte;
+                    parte === CursoName ? `"${parte.toUpperCase()}"` : parte;
 
+                  // Dibuja el texto en el lienzo en la posición (x, y)
                   ctx.fillText(textToDraw, x, y);
+
+                  // Actualiza la posición horizontal para el siguiente texto
                   x += ctx.measureText(textToDraw).width;
                 });
 
@@ -310,7 +312,12 @@ const CertificateGenerator = () => {
               // Mantener el estilo del certificado físico
               ctx.textAlign = "center";
               ctx.font = "80px Futura Bk BT";
-              ctx.fillText(CursoName, 3150, 1450);
+
+              // Agregar comillas a CursoName
+              var cursoNameConComillas = `"${CursoName}"`;
+
+              // Dibujar el texto en el lienzo en la posición (3150, 1450)
+              ctx.fillText(cursoNameConComillas, 3150, 1450);
 
               ctx.textAlign = "center";
               ctx.font = "bold 80px Futura Bk BT ";
@@ -320,84 +327,98 @@ const CertificateGenerator = () => {
               ctx.font = "bold 80px Futura Bk BT ";
               ctx.fillText(NotaFinal, 4220, 2150);
 
-       // Configurar el fuente y el tamaño del texto
-       var textoCompleto = selectedModularContent;
-       var anchoMaximo = 4700;
-       var tamanoFuente = 50; // Tamaño de la fuente en píxeles
-       var margenHorizontal = 450; // Margen horizontal entre el título del módulo y el texto del módulo
-       var margenIzquierdo = 1950; // Margen izquierdo para el texto
-       var margenSeparacion = -7; // Margen vertical entre el título y el texto
-       
-       // Función para convertir un número a números romanos (hasta 15)
-       function convertirARomanos(num) {
-         if (num < 1 || num > 15) return ""; // Asegurar que el número esté en el rango 1-15
-         var romanos = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV"];
-         return romanos[num - 1];
-       }
-       
-       // Función para dividir el texto en módulos según el carácter de viñeta
-       function dividirTextoEnModulos(texto) {
-         return texto.split("• ").filter(Boolean); // Divide el texto donde encuentra "• " y filtra entradas vacías
-       }
-       
-       // Función para dividir cada módulo en líneas según el ancho máximo
-       function dividirTextoEnLineas(texto, anchoMaximo) {
-         var palabras = texto.split(" ");
-         var lineas = [];
-         var lineaActual = palabras[0];
-         for (var i = 1; i < palabras.length; i++) {
-           var palabra = palabras[i];
-           var medida = ctx.measureText(lineaActual + " " + palabra);
-           if (medida.width < anchoMaximo) {
-             lineaActual += " " + palabra;
-           } else {
-             lineas.push(lineaActual);
-             lineaActual = palabra;
-           }
-         }
-         lineas.push(lineaActual);
-         return lineas;
-       }
-       
-       var modulos = dividirTextoEnModulos(textoCompleto);
-       var cantidadModulos = Math.min(modulos.length, 15); // Obtener la cantidad de módulos (limitado a 15)
-       
-       var yInicial = 1730; // Posición inicial en Y
-       var alturaCanvas = 2650; // Altura total del canvas (ejemplo)
-       var alturaDisponible = alturaCanvas - yInicial;
-       var alturaModulo = alturaDisponible / cantidadModulos; // Altura equitativa para cada módulo
-       
-       // Dibujar cada módulo en el canvas
-       for (var i = 0; i < cantidadModulos; i++) {
-         var tituloModulo = `Módulo ${convertirARomanos(i + 1)}`; // Convertir el número a romano
-         var textoModulo = modulos[i].trim();
-       
-         // Calcular las posiciones horizontales para el título y el texto del módulo
-         var xTitulo = margenIzquierdo;
-         var xTexto = margenIzquierdo + margenHorizontal;
-       
-         // Posiciones verticales
-         var yBase = yInicial + (i * alturaModulo); // Base del módulo
-         var yTitulo = yBase + (alturaModulo / 4); // Título a 1/4 del módulo desde la base
-         var yTexto = yBase + (alturaModulo / 4); // Texto a 1/2 del módulo desde la base
-        
-         // Establecer la fuente y el color del texto del título del módulo
-         ctx.textAlign = "left";
-         ctx.font = `${tamanoFuente}px Futura Bk BT`;
-         ctx.fillStyle = "black";
-       
-         // Renderizar el título del módulo
-         ctx.fillText(tituloModulo, xTitulo, yTitulo);
-       
-         // Renderizar el texto del módulo
-         ctx.fillText(textoModulo, xTexto, yTexto);
-       }
+              // Configurar el fuente y el tamaño del texto
+              var textoCompleto = selectedModularContent;
+              var anchoMaximo = 4700;
+              var tamanoFuente = 50; // Tamaño de la fuente en píxeles
+              var margenHorizontal = 450; // Margen horizontal entre el título del módulo y el texto del módulo
+              var margenIzquierdo = 1950; // Margen izquierdo para el texto
+              var margenSeparacion = -7; // Margen vertical entre el título y el texto
 
+              // Función para convertir un número a números romanos (hasta 15)
+              function convertirARomanos(num) {
+                if (num < 1 || num > 15) return ""; // Asegurar que el número esté en el rango 1-15
+                var romanos = [
+                  "I",
+                  "II",
+                  "III",
+                  "IV",
+                  "V",
+                  "VI",
+                  "VII",
+                  "VIII",
+                  "IX",
+                  "X",
+                  "XI",
+                  "XII",
+                  "XIII",
+                  "XIV",
+                  "XV",
+                ];
+                return romanos[num - 1];
+              }
 
+              // Función para dividir el texto en módulos según el carácter de viñeta
+              function dividirTextoEnModulos(texto) {
+                return texto.split("• ").filter(Boolean); // Divide el texto donde encuentra "• " y filtra entradas vacías
+              }
+
+              // Función para dividir cada módulo en líneas según el ancho máximo
+              function dividirTextoEnLineas(texto, anchoMaximo) {
+                var palabras = texto.split(" ");
+                var lineas = [];
+                var lineaActual = palabras[0];
+                for (var i = 1; i < palabras.length; i++) {
+                  var palabra = palabras[i];
+                  var medida = ctx.measureText(lineaActual + " " + palabra);
+                  if (medida.width < anchoMaximo) {
+                    lineaActual += " " + palabra;
+                  } else {
+                    lineas.push(lineaActual);
+                    lineaActual = palabra;
+                  }
+                }
+                lineas.push(lineaActual);
+                return lineas;
+              }
+
+              var modulos = dividirTextoEnModulos(textoCompleto);
+              var cantidadModulos = Math.min(modulos.length, 15); // Obtener la cantidad de módulos (limitado a 15)
+
+              var yInicial = 1730; // Posición inicial en Y
+              var alturaCanvas = 2650; // Altura total del canvas (ejemplo)
+              var alturaDisponible = alturaCanvas - yInicial;
+              var alturaModulo = alturaDisponible / cantidadModulos; // Altura equitativa para cada módulo
+
+              // Dibujar cada módulo en el canvas
+              for (var i = 0; i < cantidadModulos; i++) {
+                var tituloModulo = `Módulo ${convertirARomanos(i + 1)}`; // Convertir el número a romano
+                var textoModulo = modulos[i].trim();
+
+                // Calcular las posiciones horizontales para el título y el texto del módulo
+                var xTitulo = margenIzquierdo;
+                var xTexto = margenIzquierdo + margenHorizontal;
+
+                // Posiciones verticales
+                var yBase = yInicial + i * alturaModulo; // Base del módulo
+                var yTitulo = yBase + alturaModulo / 4; // Título a 1/4 del módulo desde la base
+                var yTexto = yBase + alturaModulo / 4; // Texto a 1/2 del módulo desde la base
+
+                // Establecer la fuente y el color del texto del título del módulo
+                ctx.textAlign = "left";
+                ctx.font = `${tamanoFuente}px Futura Bk BT`;
+                ctx.fillStyle = "black";
+
+                // Renderizar el título del módulo
+                ctx.fillText(tituloModulo, xTitulo, yTitulo);
+
+                // Renderizar el texto del módulo
+                ctx.fillText(textoModulo, xTexto, yTexto);
+              }
 
               ctx.textAlign = "center";
               ctx.font = "bold 80px Futura Bk BT ";
-              ctx.fillText(Promedio, 4190, 2980);
+              ctx.fillText(Promedio, 4170, 2970);
 
               ctx.textAlign = "center";
               ctx.fillStyle = "black ";
@@ -487,6 +508,7 @@ const CertificateGenerator = () => {
           htmlFor="CursoName"
         >
           <input
+            required
             placeholder="Nombre del Diplomado"
             type="text"
             id="CursoName"
@@ -499,6 +521,7 @@ const CertificateGenerator = () => {
           htmlFor="ParticipanteName"
         >
           <input
+            required
             placeholder="Nombre del participante"
             type="text"
             id="ParticipanteName"
@@ -511,6 +534,7 @@ const CertificateGenerator = () => {
           htmlFor="CodigoParticipante"
         >
           <input
+            required
             placeholder="Código del participante"
             type="text"
             id="CodigoParticipante"
@@ -522,7 +546,8 @@ const CertificateGenerator = () => {
           className="input input-bordered flex items-center mb-4"
           htmlFor="Resolucion"
         >
-          <input
+          <input 
+            required
             placeholder="Resolucion"
             type="text"
             id="Resolucion"
@@ -535,6 +560,7 @@ const CertificateGenerator = () => {
           htmlFor="FechaInicio"
         >
           <input
+            required
             placeholder="Fecha de inicio"
             type="date"
             id="FechaInicio"
@@ -547,6 +573,7 @@ const CertificateGenerator = () => {
           htmlFor="FechaFin"
         >
           <input
+            required
             placeholder="Fecha de fin"
             type="date"
             id="FechaFin"
@@ -584,22 +611,23 @@ const CertificateGenerator = () => {
           />
         </label>
 
-       
-        <label className='flex items-center mb-4 w-full'>
-        <textarea
-          id="modularType"
-          value={selectedModularContent}
-          onChange={handleModularChange}
-          className="textarea textarea-bordered textarea-sm w-full h-36"
-          placeholder="Ingresa los Módulos correspondientes al diplomado"
-        ></textarea>
-      </label>
+        <label className="flex items-center mb-4 w-full">
+          <textarea
+            required
+            id="modularType"
+            value={selectedModularContent}
+            onChange={handleModularChange}
+            className="textarea textarea-bordered textarea-sm w-full h-36"
+            placeholder="Ingresa los Módulos correspondientes al diplomado"
+          ></textarea>
+        </label>
 
         <label
           className="input input-bordered flex items-center mb-4"
           htmlFor="NotaParcial"
         >
-          <input
+          <input 
+            required
             placeholder="Nota Parcial"
             type="text"
             id="NotaParcial"
@@ -613,6 +641,7 @@ const CertificateGenerator = () => {
           htmlFor="NotaFinal"
         >
           <input
+            required
             placeholder="Nota Final"
             type="text"
             id="NotaFinal"
@@ -625,7 +654,8 @@ const CertificateGenerator = () => {
           className="input input-bordered flex items-center mb-4"
           htmlFor="Promedio"
         >
-          <input
+          <input 
+            required
             placeholder="Promedio"
             type="text"
             id="Promedio"
@@ -635,6 +665,7 @@ const CertificateGenerator = () => {
         </label>
 
         <select
+          required
           className="select select-bordered w-full mb-4"
           id="imageType"
           value={selectedImageType}
@@ -655,5 +686,8 @@ const CertificateGenerator = () => {
     </div>
   );
 };
+
+// ParticipanteName.js
+
 
 export default CertificateGenerator;
