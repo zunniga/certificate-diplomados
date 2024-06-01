@@ -73,15 +73,15 @@ export default function Home() {
         />
       </Link>
 
-      <h1 className="text-4xl font-bold tracking-tight text-slate-200 sm:text-5xl md:text-6xl p-6 mb-8">
-        <span className="block">Modelo de diploma para modificar</span>
+      <h1 className="text-4xl font-extralight tracking-tight text-slate-200 sm:text-5xl md:text-6xl p-6 mb-8">
+        <span className="block">MÓDELO DE DIPLOMA PARA MODIFICAR</span>
       </h1>
       <div className="flex flex-row">
         {[0, 1].map((index) => (
           <div key={index} className="mr-10 flex">
             <div className="flex items-end">
               <input
-                className="checkbox bg-green-500 checkbox-lg mb-2 mr-1"
+                className="checkbox checkbox-warning checkbox-lg mb-2 mr-1"
                 type="checkbox"
                 checked={enabledInputs[index]}
                 onChange={handleCheckboxChange(index)}
@@ -89,13 +89,13 @@ export default function Home() {
             </div>
 
             <label className="form-control w-full max-w-xs">
-              <div className="label bg-black rounded-xl">
+              <div className="label bg-[#006fee] rounded-xl">
                 <span className="label-text text-gray-100">
                   Carga el reverso y anverso del diplomado
                 </span>
               </div>
               <input
-                className=" bg-slate-500 file-input-bordered w-full max-w-xs"
+                className="  file-input-bordered w-full max-w-xs rounded-lg"
                 type="file"
                 onChange={handleFileChange(index)}
                 accept="image/*"
@@ -114,7 +114,7 @@ export default function Home() {
       </div>
       <Link href="/" passHref legacyBehavior>
         <button
-          className={`btn bg-indigo-600 btn-lg mt-8  ${
+          className={`btn text-white bg-gradient-to-b from-[#006fee] to-[#001d51] btn-lg mt-8  ${
             !isGuardarButtonEnabled ? "cursor-not-allowed opacity-90" : ""
           }`}
           onClick={handleGuardarImagenes}

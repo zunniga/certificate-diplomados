@@ -139,11 +139,11 @@ export default function Home() {
         {/* Contenedor Principal */}
         <div className=" flex w-full ">
           {/* Sidebar */}
-          <div className="w-1/3 p-4  text-white mt-4 h-full rounded-r-xl">
+          <div className="w-auto p-4 text-white mt-4 h-full rounded-r-xl">
             <ul>
               <li>
                 <button
-                  className="w-full btn bg-sky-700 text-white hover:bg-gray-200"
+                  className="w-full btn bg-sky-700 text-white hover:bg-gray-200 mb-2"
                   onClick={openModal}
                 >
                   Agregar manualmente

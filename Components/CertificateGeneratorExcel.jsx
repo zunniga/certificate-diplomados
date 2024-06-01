@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { ImageDatabase } from "./ImageUploaderDB";
 import { participantDB } from "./ReadExcelParticipants";
+import { TbCertificate } from "react-icons/tb";
+import { MdDelete } from "react-icons/md";
+import { PacmanLoader } from 'react-spinners';
+import { HashLoader } from 'react-spinners';
+
 
 const imageDB = new ImageDatabase();
 
@@ -471,19 +476,22 @@ for (var i = 0; i < cantidadModulos; i++) {
   return (
     <>
       <button
-        className="w-full btn  bg-sky-700 text-white hover:bg-gray-200 mt-2"
+        className="w-full btn  bg-gradient-to-b from-[#006fee] to-[#001d51] text-white border border-slate-300 hover:bg-gray-200 mt-2"
         onClick={generateCertificates}
         disabled={generatingCertificates || !participantsExist}
       >
-        {generatingCertificates
-          ? "Generando Certificados..."
-          : "Generar certificados para todos los participantes"}
+        {generatingCertificates ? (
+            <PacmanLoader color={'#ffffff'} size={15} />
+        ) : (
+          'Generar certificados para todos los participantes'
+        )}
       </button>
       <button
-        className="w-full btn  bg-sky-700 text-white hover:bg-red-400  mt-2"
+        className="w-full btn  bg-gradient-to-b from-[#c70606] to-[#660505] text-white hover:bg-red-400  mt-2"
         onClick={handleDelete}
       >
         Limpiar todos los Datos
+        <MdDelete className="" size={20} />
       </button>
     </>
   );

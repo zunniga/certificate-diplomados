@@ -5,10 +5,17 @@ import CertificateGeneratorExcel from "@/Components/CertificateGeneratorExcel";
 import CertificateGenerator from "@/Components/CertificateGenerator";
 import Link from "next/link";
 import { IoCloseCircle } from "react-icons/io5";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { GrChapterNext } from "react-icons/gr";
+import { GrChapterPrevious } from "react-icons/gr";
+import { GrLinkNext } from "react-icons/gr";
+import { GrLinkPrevious } from "react-icons/gr";
+import { MdOutlineFileDownloadOff } from "react-icons/md";
 import jsPDF from "jspdf";
 import { saveAs } from "file-saver";
 import { ImageDatabase } from "@/Components/ImageUploaderDB";
 import { ImageMagnifier } from "@/Components/imgMagnifier";
+import { LuPenSquare } from "react-icons/lu";
 
 const imageDB = new ImageDatabase(); // Asegúrate de crear la instancia de la base de datos
 
@@ -131,14 +138,20 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-cyan-500 h-screen overflow-hidden">
+    <div className=" h-screen bg-[#001d51]  overflow-hidden">
       {/* Encabezado fijo */}
-      <header className="mt-8 text-center">
-        <h1 className="mb-4 text-3xl">EMISIÓN DE DIPLOMADOS</h1>
+      <header className="mt-8 text-center mb-10">
+        <h1 className="mb-4 text-3xl font-extralight">EMISIÓN DE DIPLOMADOS</h1>
         <ul className="steps w-full">
           {/* Envuelve cada <li> en un componente <Link> */}
           <li className="step step-info ">
-            <Link href="/cursos/">Insercion de Participantes</Link>
+            <Link href="/cursos/">Insercion de Participantes </Link>
+            <Link href="/" passHref legacyBehavior>
+              <button className="join-item bg-[#001d51] text-white btn btn-outline ">
+                <GrLinkPrevious size={25} />
+                Retroceder
+              </button>
+            </Link>
           </li>
           <li className="step">
             <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
@@ -147,30 +160,38 @@ export default function Home() {
             <Link href="/" passHref>
               Exportar en PDF
             </Link>
+            <Link href="/cursos/graduate_reverso" passHref legacyBehavior>
+              <button className="join-item bg-[#001d51] text-white btn btn-outline">
+                Avanzar
+                <GrLinkNext size={25} />
+              </button>
+            </Link>
           </li>
         </ul>
       </header>
       {/* Sidebar */}
-      <div className="bg-cyan-500 flex h-full">
+      <div className="bg-[#001d51]  flex h-full">
         {/* Contenedor Principal */}
         <div className=" flex w-full ">
           {/* Sidebar */}
-          <div className="w-1/3 p-4 bg-cyan-500 text-white mt-4 h-full rounded-r-xl">
+          <div className="w-auto p-4 border border-slate-200 text-white mt-4 h-80 rounded-r-xl">
             <ul>
               <li>
                 <button
-                  className="w-full btn bg-sky-700 text-white hover:bg-gray-200"
+                  className="w-full btn bg-gradient-to-b from-[#006fee] to-[#001d51] text-[#ffff] hover:bg-white mb-2"
                   onClick={openModal}
                 >
                   Agregar manualmente
+                  <LuPenSquare className="" size={20} color="#" />
                 </button>
               </li>
               <li>
                 <button
-                  className="w-full btn  bg-sky-700 text-white hover:bg-gray-200 mt-2"
+                  className="w-full btn  bg-gradient-to-b from-[#006fee] to-[#001d51] text-[#fff] hover:bg-slate-400"
                   onClick={openExcelModal}
                 >
-                  Insertar por Excel
+                  Inserción por Excel
+                  <RiFileExcel2Fill className="ml-6" size={20} color="#" />
                 </button>
               </li>
               <li className="">
@@ -179,35 +200,26 @@ export default function Home() {
                   onDeleteData={updateButton}
                 />
               </li>
-             
+
               <li className="join grid grid-cols-2 mt-3 ">
                 <button
                   onClick={goPrevious}
-                  className="btn bg-gray-800 text-white hover:bg-gray-600 mr-2"
+                  className="btn bg-slate-100 text-[#001d51] hover:bg-gray-600 mr-2"
                 >
+                  <GrChapterPrevious className="" size={20} />
                   Anterior
                 </button>
                 <button
                   onClick={goNext}
-                  className="btn bg-gray-800 text-white  hover:bg-gray-600 ml-2"
+                  className="btn bg-slate-100 text-[#001d51]  hover:bg-gray-600 ml-2"
                 >
                   Siguiente
+                  <GrChapterNext className="" size={20} />
                 </button>
               </li>
 
               <li>
-                <div className="join grid grid-cols-2 mt-3 ">
-                  <Link href="/" passHref legacyBehavior>
-                    <button className="join-item bg-slate-200 btn btn-outline text-gray-900">
-                      Retroceder
-                    </button>
-                  </Link>
-                  <Link href="/cursos/graduate_reverso" passHref legacyBehavior>
-                    <button className="join-item bg-slate-200 text-gray-900 btn">
-                      Avanzar
-                    </button>
-                  </Link>
-                </div>
+                <div className="join grid grid-cols-2 mt-3 "></div>
               </li>
             </ul>
           </div>
@@ -237,37 +249,44 @@ export default function Home() {
             </div>
 
             {/* Imagen */}
-            <div className="carousel-container max-w-[80%] flex flex-col items-center mb-14" >
-              {" "}
+            <div className="carousel-container max-w-[70%] flex flex-col items-center mb-14 ">
               {/* Ajustar max-w-lg según sea necesario */}
               {generatedCertificates.length > 0 ? (
-                <ImageMagnifier
-                  src={generatedCertificates[currentImageIndex]}
-                  magnifierHeight={150}
-                  magnifieWidth={300}
-                  zoomLevel={1.5}
-                  alt={`Generated Certificate ${currentImageIndex}`}
-                />
+                <>
+                  <ImageMagnifier
+                    src={generatedCertificates[currentImageIndex]}
+                    magnifierHeight={150}
+                    magnifieWidth={300}
+                    zoomLevel={1.5}
+                    alt={`Generated Certificate ${currentImageIndex}`}
+                  />
+                  <button
+                    className="ml-20 btn bg-gradient-to-b from-[#c70606] to-[#660505] text-white hover:bg-red-400 mt-2"
+                    onClick={eliminarImagen}
+                  >
+                    Eliminar Certificado
+                  </button>
+                </>
               ) : (
-                <div>Genera tus Diplomados</div>
-
+                <div className="flex flex-col ml-64 mt-10 items-center text-center">
+                  <MdOutlineFileDownloadOff size={150} />
+                  <span className="font-extralight">
+                    Aun no hay diplomados generados :({" "}
+                  </span>
+                </div>
               )}
-              <button
-                className="ml-20 btn bg-cyan-600 text-white hover:bg-red-400"
-                onClick={eliminarImagen}
-              >
-                Eliminar Certificado
-              </button>
             </div>
           </div>
         </div>
       </div>
-     
+
       <div>
         <dialog id="my_modal_1" className="modal" ref={modalRef}>
           <div className="modal-box bg-sky-500">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-lg mb-4">Ingresa los datos del participante</h3>
+              <h3 className="font-bold text-lg mb-4">
+                Ingresa los datos del participante
+              </h3>
               <button className="close-button" onClick={closeModal}>
                 <IoCloseCircle className="text-red-500 h-8 w-8 mb-4" />
               </button>
@@ -293,5 +312,3 @@ export default function Home() {
     </div>
   );
 }
-
-

@@ -216,7 +216,7 @@ export default function Home() {
         {/* Contenedor Principal */}
         <div className=" flex w-full ">
           {/* Sidebar */}
-          <div className="w-1/4 p-4  text-white mt-4 h-full rounded-r-xl">
+          <div className="w-96 p-4  text-white mt-4 h-full rounded-r-xl">
             <ul>
               <li>
                 <button
