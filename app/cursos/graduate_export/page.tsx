@@ -1,10 +1,16 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import jsPDF from "jspdf";
 import { ImageDatabase } from "@/Components/ImageUploaderDB";
 import ParticipanteName from "@/Components/CertificateGenerator";
-
+import { GrLinkNext } from "react-icons/gr";
+import { GrLinkPrevious } from "react-icons/gr";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { FaHand } from "react-icons/fa6";
+import { LuCheckCircle } from "react-icons/lu";
+import { BsCheckCircleFill } from "react-icons/bs";
+import { BsXCircleFill } from "react-icons/bs";
 
 const imageDB = new ImageDatabase();
 
@@ -18,55 +24,71 @@ interface Certificate {
 
 type CertificatesList = Certificate[];
 
-const CertificatesTable: React.FC<{ certificates: CertificatesList, title: string }> = ({ certificates, title }) => {
+const CertificatesTable: React.FC<{
+  certificates: CertificatesList;
+  title: string;
+}> = ({ certificates, title }) => {
   return (
     <div>
-      <h2 className="text-lg mb-2">{title}</h2>
-      <table className="rounded-xl table table-xs table-auto table-pin-rows mb-4">
-        <thead>
-          <tr>
-            <th>Nombre del Participante</th>
-            <th>Verificado</th>
-          </tr>
-        </thead>
-        <tbody>
-          {certificates.map((certificate, index) => (
-            <tr key={index}>
-              <td>{certificate.ownerName}</td>
-              <td>
-                {certificate.certificateUploaded ? (
-                  <span className="text-green-500">&#10004;</span>
-                ) : (
-                  <span className="text-red-500">&#10008;</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+  <h2 className="text-lg mb-2">{title}</h2>
+  <table className="rounded-xl table table-xs table-auto table-pin-rows mb-4">
+    <thead>
+      <tr>
+        <th>Nombre del Participante</th>
+        <th>Verificado</th>
+      </tr>
+    </thead>
+    <tbody>
+      {certificates.map((certificate, index) => (
+        <tr key={index}>
+          <td>{certificate.ownerName}</td>
+          <td>
+            {certificate.certificateUploaded ? (
+              <BsCheckCircleFill className="text-green-500" size={30} />
+            ) : (
+              <span>
+                {certificate.ownerName} <BsXCircleFill className="text-red-700" size={30} />
+              </span>
+            )}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+
   );
 };
 
 export default function Home() {
-  const [digitalCertificates, setDigitalCertificates] = useState<CertificatesList>([]);
-  const [physicalCertificates, setPhysicalCertificates] = useState<CertificatesList>([]);
+  const [digitalCertificates, setDigitalCertificates] =
+    useState<CertificatesList>([]);
+  const [physicalCertificates, setPhysicalCertificates] =
+    useState<CertificatesList>([]);
   const [excelFolderPath, setExcelFolderPath] = useState<string | null>(null);
 
   useEffect(() => {
     // Obtener la ruta de la carpeta del archivo Excel desde sessionStorage
-    const storedExcelFilePath = sessionStorage.getItem('excelFilePath');
+    const storedExcelFilePath = sessionStorage.getItem("excelFilePath");
     if (storedExcelFilePath) {
       // Extraer la carpeta del path
-      const folderPath = storedExcelFilePath.substring(0, storedExcelFilePath.lastIndexOf("\\") + 1);
+      const folderPath = storedExcelFilePath.substring(
+        0,
+        storedExcelFilePath.lastIndexOf("\\") + 1
+      );
       setExcelFolderPath(folderPath);
-      console.log('Ruta del archivo Excel obtenida de sessionStorage:', folderPath);
+      console.log(
+        "Ruta del archivo Excel obtenida de sessionStorage:",
+        folderPath
+      );
     }
 
     const obtenerCertificados = async () => {
       try {
-        const certificates: CertificatesList = await imageDB.certificates.toArray();
-        
+        const certificates: CertificatesList =
+          await imageDB.certificates.toArray();
+
         const digitalCerts = certificates
           .filter((cert) => cert.type === "certificadoDigital")
           .map((cert) => ({ ...cert, certificateUploaded: true }));
@@ -93,7 +115,7 @@ export default function Home() {
 
     const groupedCertificates: { [key: string]: Certificate[] } = {};
 
-    digitalCertificates.concat(physicalCertificates).forEach(certificate => {
+    digitalCertificates.concat(physicalCertificates).forEach((certificate) => {
       if (!groupedCertificates[certificate.ownerName]) {
         groupedCertificates[certificate.ownerName] = [];
       }
@@ -123,26 +145,26 @@ export default function Home() {
           );
         });
 
-        const pdfBase64 = pdf.output('datauristring');
+        const pdfBase64 = pdf.output("datauristring");
 
         const requestBody = {
           groupName: ownerName, // Nombre del grupo
           index: 0, // Índice (puedes cambiar según necesites)
           pdfBase64: pdfBase64,
-          routeExcel: excelFolderPath
+          routeExcel: excelFolderPath,
         };
 
         // Enviar los datos a la API
         const response = await fetch("../api/apiPdf", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(requestBody)
+          body: JSON.stringify(requestBody),
         });
 
         if (!response.ok) {
-          throw new Error('Error al enviar los datos a la API.');
+          throw new Error("Error al enviar los datos a la API.");
         }
       }
 
@@ -156,17 +178,17 @@ export default function Home() {
   const exportarPDFManual = () => {
     const pdf = new jsPDF("landscape");
     const certificates = digitalCertificates.concat(physicalCertificates);
-  
+
     if (certificates.length === 0) {
       alert("No realizaste ninguna inserción manual");
       return;
     }
-  
+
     certificates.forEach((certificate, index) => {
       if (index > 0) {
         pdf.addPage(); // Agrega una nueva página para cada certificado, excepto el primero
       }
-  
+
       const width = pdf.internal.pageSize.getWidth();
       const height = pdf.internal.pageSize.getHeight();
       pdf.addImage(
@@ -180,80 +202,102 @@ export default function Home() {
         "SLOW"
       );
     });
-  
+
     // Obtener el nombre del primer participante (si hay alguno)
     const primerParticipante = certificates[0].ownerName;
-    const fileName = primerParticipante ? `Diplomado_${primerParticipante}.pdf` : "Diplomado.pdf";
-  
+    const fileName = primerParticipante
+      ? `Diplomado_${primerParticipante}.pdf`
+      : "Diplomado.pdf";
+
     // Guardar el PDF una vez que se hayan agregado todas las imágenes
     pdf.save(fileName);
   };
-  
-  
-  
-  
+
   return (
-    <div className="bg-gray-500 h-screen overflow-hidden">
+    <div className="bg-[#001d51] h-screen overflow-hidden">
       <header className="mt-8 text-center">
-        <h1 className="mb-4 text-3xl">EMISIÓN DE DIPLOMADOS</h1>
+        <h1 className="mb-4 text-3xl font-extralight">EMISIÓN DE DIPLOMADOS</h1>
         <ul className="steps w-full">
-          <li className="step step-info ">
-            <Link href="/cursos/">Insercion de Participantes</Link>
-          </li>
-          <li className="step step-info">
-            <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
-          </li>
-          <li className="step step-info">
-            <Link href="/cursos/cert_soloemp" passHref>
-              Exportar en PDF
+          {/* Envuelve cada <li> en un componente <Link> */}
+          <li className="step step-warning font-extralight text-xl ">
+            <Link href="/cursos/">Insercion de Participantes </Link>
+            <Link href="/cursos/graduate_reverso" passHref legacyBehavior>
+              <button className=" bg-[#001d51] text-white btn btn-outline hover:bg-[#178617] hover:text-white mt-4">
+                <GrLinkPrevious size={25} />
+                Retroceder
+              </button>
             </Link>
           </li>
-         
+          <li className="step step-warning font-extralight text-xl ">
+            <Link href="/cursos/graduate_reverso/">Anverso del Diplomado</Link>
+          </li>
+          <li className="step step-warning font-extralight text-xl">
+            <Link href="/" passHref>
+              Exportar en PDF
+            </Link>
+            <Link href="/cursos/graduate_export" passHref legacyBehavior>
+              <button className=" bg-[#001d51] text-white btn btn-outline hover:bg-[#178617] hover:text-white mt-4">
+                Avanzar
+                <GrLinkNext size={25} />
+              </button>
+            </Link>
+          </li>
         </ul>
-        
       </header>
-      <div className="bg-gray-500 flex h-full">
+      <div className="bg-[#001d51] flex h-full">
         {/* Contenedor Principal */}
         <div className=" flex w-full ">
           {/* Sidebar */}
-          <div className="w-96 p-4  text-white mt-4 h-full rounded-r-xl">
-            <ul>
+          <div className="w-[400px]  text-white mt-24 ml-5  rounded-r-xl ">
+            <ul className="p-4 border border-slate-200 rounded-xl">
               <li>
                 <button
-                  className="w-full btn bg-blue-500 text-white hover:bg-slate-200 mt-2"
+                  className="w-full  text-xl font-futura-bkbt btn bg-gradient-to-b from-[#039b03] to-[#06440f] text-[#fff] hover:bg-white mb-5"
                   onClick={exportarPDF}
                 >
                   Exportar en PDF (Excel)
+                  <RiFileExcel2Fill className="" size={25} color="#" />
                 </button>
                 <button
-                  className="w-full btn bg-blue-500 text-white hover:bg-slate-200 mt-2"
+                  className="w-full text-xl font-futura-bkbt btn bg-gradient-to-b from-[#006fee] to-[#001d51] text-[#ffff] hover:bg-white mb-5"
                   onClick={exportarPDFManual}
                 >
                   Exportar en PDF (Manual)
+                  <FaHand size={25} />
                 </button>
               </li>
-              
-              <li>
-                <div className="join grid grid-cols-2 mt-3 ">
-                  <Link href="/cursos/graduate_reverso" passHref legacyBehavior>
-                    <button className="join-item bg-slate-200 btn btn-outline text-gray-900">
-                      Retroceder
-                    </button>
-                  </Link>
-                  <Link href="/cursos/cert_export" passHref legacyBehavior>
-                    <button className="join-item bg-slate-200 text-gray-900 btn">
-                      Avanzar
-                    </button>
-                  </Link>
-                </div>
-              </li>
-              <li></li>
             </ul>
           </div>
-          <div className="overflow-x-auto h-96 mt-4 ml-3 rounded-lg">
-            <CertificatesTable certificates={digitalCertificates} title="Diplomados(ANVERSO)" />
-            <CertificatesTable certificates={physicalCertificates} title="Diplomados(REVERSO" />
 
+          <div className="overflow-x-auto mt-24 max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <p className="text-lg font-futura-bkbt flex items-center justify-center">
+                Verifica que todos los participantes estén insertados.
+                <LuCheckCircle className="ml-2" size={35} />
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div className="bg-[#001d51] border rounded-lg p-10 text-white">
+                <h2 className="text-2xl font-futura-bkbt mb-6">
+                  Diplomados (ANVERSO)
+                </h2>
+                <CertificatesTable
+                  certificates={digitalCertificates}
+                  title=""
+                  
+                />
+              </div>
+              <div className="bg-[#001d51] border rounded-lg p-10 text-white">
+                <h2 className="text-2xl font-futura-bkbt mb-6">
+                  Diplomados (REVERSO)
+                </h2>
+                <CertificatesTable
+                  certificates={physicalCertificates}
+                  title=""
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

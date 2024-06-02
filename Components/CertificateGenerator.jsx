@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ImageDatabase } from "./ImageUploaderDB"; // Importa la clase ImageDatabase
+import { LuBookUp } from "react-icons/lu";
+import { LuBookDown } from "react-icons/lu";
+
 
 const CertificateGenerator = () => {
   const [CursoName, setCursoName] = useState("");
@@ -499,16 +502,17 @@ const CertificateGenerator = () => {
   return (
     <div>
       <form method="dialog" onSubmit={handleSubmit}>
-        <div className=" text-center bg-slate-900 border border-zinc-950 rounded-md mb-4 p-2 ">
-          {" "}
-          ANVERSO DEL DIPLOMADO{" "}
-        </div>
+      <div className="text-center text-xl bg-[#001d51] font-futura-bkbt border border-zinc-950 rounded-md mb-4 p-2 flex items-center justify-center">
+      ANVERSO DEL DIPLOMADO
+      <LuBookUp className="ml-2" size={25} />
+    </div>
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200  input-bordered flex items-center mb-4"
           htmlFor="CursoName"
         >
           <input
             required
+            className="text-[#001d51]"
             placeholder="Nombre del Diplomado"
             type="text"
             id="CursoName"
@@ -517,10 +521,11 @@ const CertificateGenerator = () => {
           />
         </label>
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200 input-bordered flex items-center mb-4"
           htmlFor="ParticipanteName"
         >
           <input
+          className="text-[#001d51]"
             required
             placeholder="Nombre del participante"
             type="text"
@@ -530,10 +535,11 @@ const CertificateGenerator = () => {
           />
         </label>
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200 input-bordered flex items-center mb-4"
           htmlFor="CodigoParticipante"
         >
           <input
+            className="text-[#001d51]"
             required
             placeholder="Código del participante"
             type="text"
@@ -543,10 +549,11 @@ const CertificateGenerator = () => {
           />
         </label>
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200 input-bordered flex items-center mb-4"
           htmlFor="Resolucion"
         >
           <input 
+          className="text-[#001d51]"
             required
             placeholder="Resolucion"
             type="text"
@@ -556,10 +563,12 @@ const CertificateGenerator = () => {
           />
         </label>
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-[#649bdd] input-bordered flex items-center mb-4"
           htmlFor="FechaInicio"
         >
+        <h1 className="mr-6" > Fecha de Inicio:  </h1>
           <input
+          className=""
             required
             placeholder="Fecha de inicio"
             type="date"
@@ -567,11 +576,14 @@ const CertificateGenerator = () => {
             value={FechaInicio}
             onChange={(e) => setFechaInicio(e.target.value)}
           />
+          
+          
         </label>
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-[#649bdd] input-bordered flex items-center mb-4"
           htmlFor="FechaFin"
         >
+           <h1 className="mr-6" > Fecha de Finalización:  </h1>
           <input
             required
             placeholder="Fecha de fin"
@@ -582,15 +594,16 @@ const CertificateGenerator = () => {
           />
         </label>
 
-        <div className=" text-center bg-slate-900 border border-zinc-950 rounded-md mb-4 p-2 ">
-          {" "}
-          REVERSO DEL DIPLOMADO{" "}
-        </div>
+        <div className="text-center text-xl bg-[#001d51] font-futura-bkbt border border-zinc-950 rounded-md mb-4 p-2 flex items-center justify-center">
+      REVERSO DEL DIPLOMADO
+      <LuBookDown className="ml-2" size={25} />
+    </div>
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200 input-bordered flex items-center mb-4"
           htmlFor="CursoName"
         >
           <input
+            className="text-[#001d51]"
             placeholder="Nombre del curso"
             type="text"
             id="CursoName"
@@ -599,10 +612,11 @@ const CertificateGenerator = () => {
           />
         </label>
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200 input-bordered flex items-center mb-4"
           htmlFor="CodigoParticipante"
         >
           <input
+          className="text-[#001d51]"
             placeholder="Código del participante"
             type="text"
             id="CodigoParticipante"
@@ -611,22 +625,23 @@ const CertificateGenerator = () => {
           />
         </label>
 
-        <label className="flex items-center mb-4 w-full">
+        <label className="flex  items-center mb-4 w-full">
           <textarea
             required
             id="modularType"
             value={selectedModularContent}
             onChange={handleModularChange}
-            className="textarea textarea-bordered textarea-sm w-full h-36"
+            className="textarea text-[#001d51] bg-slate-200 textarea-bordered textarea-sm w-full h-36"
             placeholder="Ingresa los Módulos correspondientes al diplomado"
           ></textarea>
         </label>
 
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200  input-bordered flex items-center mb-4"
           htmlFor="NotaParcial"
         >
           <input 
+          className="text-[#001d51]"
             required
             placeholder="Nota Parcial"
             type="text"
@@ -637,10 +652,11 @@ const CertificateGenerator = () => {
         </label>
 
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200  input-bordered flex items-center mb-4"
           htmlFor="NotaFinal"
         >
-          <input
+          <input 
+            className="text-[#001d51]"
             required
             placeholder="Nota Final"
             type="text"
@@ -651,10 +667,11 @@ const CertificateGenerator = () => {
         </label>
 
         <label
-          className="input input-bordered flex items-center mb-4"
+          className="input bg-slate-200  input-bordered flex items-center mb-4"
           htmlFor="Promedio"
         >
           <input 
+            className="text-[#001d51]"
             required
             placeholder="Promedio"
             type="text"
@@ -666,7 +683,7 @@ const CertificateGenerator = () => {
 
         <select
           required
-          className="select select-bordered w-full mb-4"
+          className="select bg-[#649bdd] select-bordered w-full mb-4"
           id="imageType"
           value={selectedImageType}
           onChange={(e) => setSelectedImageType(e.target.value)}
@@ -676,7 +693,7 @@ const CertificateGenerator = () => {
         </select>
 
         <button
-          className="btn w-full"
+          className="btn bg-[#001d51] w-full"
           type="submit"
           disabled={setSubmitButtonDisabled}
         >

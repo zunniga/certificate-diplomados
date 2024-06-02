@@ -11,6 +11,7 @@ import { GrChapterPrevious } from "react-icons/gr";
 import { GrLinkNext } from "react-icons/gr";
 import { GrLinkPrevious } from "react-icons/gr";
 import { MdOutlineFileDownloadOff } from "react-icons/md";
+import { TbCertificate } from "react-icons/tb";
 import jsPDF from "jspdf";
 import { saveAs } from "file-saver";
 import { ImageDatabase } from "@/Components/ImageUploaderDB";
@@ -138,30 +139,30 @@ export default function Home() {
   };
 
   return (
-    <div className=" h-screen bg-[#001d51]  overflow-hidden">
+    <div className=" min-h-screen bg-[#001d51]  overflow-hidden">
       {/* Encabezado fijo */}
       <header className="mt-8 text-center mb-10">
         <h1 className="mb-4 text-3xl font-extralight">EMISIÓN DE DIPLOMADOS</h1>
         <ul className="steps w-full">
           {/* Envuelve cada <li> en un componente <Link> */}
-          <li className="step step-info ">
+          <li className="step step-warning font-extralight text-xl ">
             <Link href="/cursos/">Insercion de Participantes </Link>
             <Link href="/" passHref legacyBehavior>
-              <button className="join-item bg-[#001d51] text-white btn btn-outline ">
+              <button className=" bg-[#001d51] text-white btn btn-outline hover:bg-[#178617] hover:text-white mt-4">
                 <GrLinkPrevious size={25} />
                 Retroceder
               </button>
             </Link>
           </li>
-          <li className="step">
-            <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
+          <li className="step font-extralight text-xl ">
+            <Link href="/cursos/graduate_reverso/">Anverso del Diplomado</Link>
           </li>
-          <li className="step">
+          <li className="step font-extralight text-xl">
             <Link href="/" passHref>
               Exportar en PDF
             </Link>
             <Link href="/cursos/graduate_reverso" passHref legacyBehavior>
-              <button className="join-item bg-[#001d51] text-white btn btn-outline">
+              <button className=" bg-[#001d51] text-white btn btn-outline hover:bg-[#178617] hover:text-white mt-4">
                 Avanzar
                 <GrLinkNext size={25} />
               </button>
@@ -174,11 +175,12 @@ export default function Home() {
         {/* Contenedor Principal */}
         <div className=" flex w-full ">
           {/* Sidebar */}
-          <div className="w-auto p-4 border border-slate-200 text-white mt-4 h-80 rounded-r-xl">
-            <ul>
+
+          <div className="w-[400px]  text-white mt-24 ml-5  rounded-r-xl ">
+            <ul className="p-4  border border-slate-200 rounded-xl">
               <li>
                 <button
-                  className="w-full btn bg-gradient-to-b from-[#006fee] to-[#001d51] text-[#ffff] hover:bg-white mb-2"
+                  className="w-full  text-xl font-futura-bkbt btn bg-gradient-to-b from-[#006fee] to-[#001d51] text-[#ffff] hover:bg-white mb-5"
                   onClick={openModal}
                 >
                   Agregar manualmente
@@ -187,11 +189,11 @@ export default function Home() {
               </li>
               <li>
                 <button
-                  className="w-full btn  bg-gradient-to-b from-[#006fee] to-[#001d51] text-[#fff] hover:bg-slate-400"
+                  className="w-full btn text-xl font-futura-bkbt bg-gradient-to-b from-[#006fee] to-[#001d51] text-[#fff] hover:bg-slate-400 mb-5"
                   onClick={openExcelModal}
                 >
                   Inserción por Excel
-                  <RiFileExcel2Fill className="ml-6" size={20} color="#" />
+                  <RiFileExcel2Fill className="ml-6" size={25} color="#" />
                 </button>
               </li>
               <li className="">
@@ -223,20 +225,24 @@ export default function Home() {
               </li>
             </ul>
           </div>
-          <div className="px-4 pt-3 flex flex-col items-center ">
+          
             {/* Contador de imágenes */}
+            
+
+            {/* Imagen */}
+            <div className="carousel-container max-w-[60%] h-full flex flex-col justify-center items-center mb-14 ">
             <div className="mb-4 text-white flex items-center justify-between">
               {/* Botón Anterior */}
 
               {/* Contador de imágenes */}
-              <div className="  text-white flex items-center justify-between w-full">
+              <div className="  text-white flex items-center justify-between ">
                 <div className="join">
                   {generatedCertificates.map((_, index) => (
                     <button
                       key={index}
                       className={`join-item btn ${
                         index === currentImageIndex
-                          ? "bg-cyan-500 text-white"
+                          ? "bg-amber-400 text-white"
                           : ""
                       }`}
                       onClick={() => setCurrentImageIndex(index)}
@@ -247,9 +253,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            {/* Imagen */}
-            <div className="carousel-container max-w-[70%] flex flex-col items-center mb-14 ">
               {/* Ajustar max-w-lg según sea necesario */}
               {generatedCertificates.length > 0 ? (
                 <>
@@ -261,31 +264,33 @@ export default function Home() {
                     alt={`Generated Certificate ${currentImageIndex}`}
                   />
                   <button
-                    className="ml-20 btn bg-gradient-to-b from-[#c70606] to-[#660505] text-white hover:bg-red-400 mt-2"
+                    className="ml-20 btn bg-gradient-to-b from-[#c70606] to-[#660505] text-white hover:bg-red-400 mt-2 "
                     onClick={eliminarImagen}
                   >
                     Eliminar Certificado
                   </button>
                 </>
               ) : (
-                <div className="flex flex-col ml-64 mt-10 items-center text-center">
+                <div className="flex flex-col ml-96 mt-10 items-center text-center">
                   <MdOutlineFileDownloadOff size={150} />
                   <span className="font-extralight">
-                    Aun no hay diplomados generados :({" "}
+                    Aún no hay diplomados generados :({" "}
                   </span>
                 </div>
               )}
             </div>
-          </div>
+            
+       
+
         </div>
       </div>
 
       <div>
         <dialog id="my_modal_1" className="modal" ref={modalRef}>
-          <div className="modal-box bg-sky-500">
+          <div className="modal-box bg-slate-300">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-lg mb-4">
-                Ingresa los datos del participante
+              <h3 className="font-bold text-lg text-[#001d51] mb-4">
+                INGRESA LOS DATOS DEL PARTICIPANTE
               </h3>
               <button className="close-button" onClick={closeModal}>
                 <IoCloseCircle className="text-red-500 h-8 w-8 mb-4" />

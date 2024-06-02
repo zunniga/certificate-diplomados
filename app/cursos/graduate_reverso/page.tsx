@@ -9,6 +9,15 @@ import jsPDF from "jspdf";
 import { saveAs } from "file-saver";
 import { ImageDatabase } from "@/Components/ImageUploaderDB";
 import { ImageMagnifier } from "@/Components/imgMagnifier";
+import { GrLinkNext } from "react-icons/gr";
+import { GrLinkPrevious } from "react-icons/gr";
+import { LuPenSquare } from "react-icons/lu";
+import { RiFileExcel2Fill } from "react-icons/ri";
+import { GrChapterNext } from "react-icons/gr";
+import { GrChapterPrevious } from "react-icons/gr";
+import { MdOutlineFileDownloadOff } from "react-icons/md";
+
+
 
 const imageDB = new ImageDatabase(); // Asegúrate de crear la instancia de la base de datos
 
@@ -115,48 +124,45 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-gray-500 h-screen overflow-hidden">
+    <div className="min-h-screen bg-[#001d51]  overflow-hidden">
       {/* Encabezado fijo */}
-      <header className="mt-8 text-center">
-        <h1 className="mb-4 text-3xl">EMISIÓN DE DIPLOMADOS</h1>
-        <ul className="steps w-full">
+      <header className="mt-8 text-center mb-10">
+        <h1 className="mb-4 text-3xl font-extralight">EMISIÓN DE DIPLOMADOS</h1>
+        <ul className="steps   w-full">
           {/* Envuelve cada <li> en un componente <Link> */}
-          <li className="step step-info ">
-            <Link href="/cursos/">Insercion de Participantes</Link>
+          <li className="step step-warning font-extralight text-xl ">
+            <Link href="/cursos/">Insercion de Participantes </Link>
+            <Link href="/cursos/" passHref legacyBehavior>
+              <button className=" bg-[#001d51] text-white btn btn-outline hover:bg-[#178617] hover:text-white mt-4">
+                <GrLinkPrevious size={25} />
+                Retroceder
+              </button>
+            </Link>
           </li>
-          <li className="step step-info">
+          <li className="step step-warning font-extralight text-xl ">
             <Link href="/cursos/cert_phisyc/">Anverso del Diplomado</Link>
           </li>
-          <li className="step">
-            <Link href="/cursos/cert_soloemp" passHref>
+          <li className="step font-extralight text-xl">
+            <Link href="/cursos/graduate_export" passHref>
               Exportar en PDF
+            </Link>
+            <Link href="/cursos/graduate_export" passHref legacyBehavior>
+              <button className=" bg-[#001d51] text-white btn btn-outline hover:bg-[#178617] hover:text-white mt-4">
+                Avanzar
+                <GrLinkNext size={25} />
+              </button>
             </Link>
           </li>
         </ul>
       </header>
       {/* Sidebar */}
-      <div className="bg-gray-500 flex h-full">
+      <div className="bg-[#001d51]  flex h-full">
         {/* Contenedor Principal */}
         <div className=" flex w-full ">
           {/* Sidebar */}
-          <div className="w-auto p-4 text-white mt-4 h-full rounded-r-xl">
-            <ul>
-              <li>
-                <button
-                  className="w-full btn bg-sky-700 text-white hover:bg-gray-200 mb-2"
-                  onClick={openModal}
-                >
-                  Agregar manualmente
-                </button>
-              </li>
-              <li>
-                <button
-                  className="w-full btn bg-sky-700 text-white hover:bg-gray-200"
-                  onClick={openExcelModal}
-                >
-                  Insertar por Excel
-                </button>
-              </li>
+          <div className="w-[400px]  text-white mt-24 ml-5  rounded-r-xl ">
+            <ul className="p-4 border border-slate-200 rounded-xl">
+              
               <li>
                 <CertificateGeneratorExcel
                   onCertificateGenerated={actualizarCertificados}
@@ -166,46 +172,40 @@ export default function Home() {
               <li className="join grid grid-cols-2 mt-3 ">
                 <button
                   onClick={goPrevious}
-                  className="btn bg-gray-800 text-white hover:bg-gray-600 mr-2"
+                  className="btn bg-slate-100 text-[#001d51] hover:bg-gray-600 mr-2"
                 >
+                   <GrChapterPrevious className="" size={20} />
                   Anterior
                 </button>
                 <button
                   onClick={goNext}
-                  className="btn bg-gray-800 text-white  hover:bg-gray-600 ml-2"
+                  className="btn bg-slate-100 text-[#001d51]  hover:bg-gray-600 ml-2"
                 >
                   Siguiente
+                  <GrChapterNext className="" size={20} />
                 </button>
               </li>
               <li>
-                <div className="join grid grid-cols-2 mt-3 ">
-                  <Link href="/cursos/" passHref legacyBehavior>
-                    <button className="join-item bg-slate-200 btn btn-outline text-gray-900">
-                      Retroceder
-                    </button>
-                  </Link>
-                  <Link href="/cursos/graduate_export" passHref legacyBehavior>
-                    <button className="join-item bg-slate-200 text-gray-900 btn">
-                      Avanzar
-                    </button>
-                  </Link>
-                </div>
+                <div className="join grid grid-cols-2 mt-3 "></div>
               </li>
             </ul>
           </div>
-          <div className="px-4 pt-3 flex flex-col items-center ">
-            {/* Contador de imágenes */}
+
+           {/* Imagen */}
+           <div className="carousel-container max-w-[60%] h-full flex flex-col justify-center items-center mb-14 ">
             <div className="mb-4 text-white flex items-center justify-between">
               {/* Botón Anterior */}
 
               {/* Contador de imágenes */}
-              <div className=" text-white flex items-center justify-between w-full">
+              <div className="  text-white flex items-center justify-between ">
                 <div className="join">
                   {generatedCertificates.map((_, index) => (
                     <button
                       key={index}
                       className={`join-item btn ${
-                        index === currentImageIndex ? "btn-info  text-white" : ""
+                        index === currentImageIndex
+                          ? "bg-amber-400 text-white"
+                          : ""
                       }`}
                       onClick={() => setCurrentImageIndex(index)}
                     >
@@ -215,32 +215,41 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            {/* Imagen */}
-            <div className="carousel-container max-w-[80%] flex flex-col items-center">
-              {" "}
               {/* Ajustar max-w-lg según sea necesario */}
               {generatedCertificates.length > 0 ? (
-                <ImageMagnifier
-                  src={generatedCertificates[currentImageIndex]}
-                  magnifierHeight={150}
-                  magnifieWidth={300}
-                  zoomLevel={1.5}
-                  alt={`Generated Certificate ${currentImageIndex}`}
-                />
+                <>
+                  <ImageMagnifier
+                    src={generatedCertificates[currentImageIndex]}
+                    magnifierHeight={150}
+                    magnifieWidth={300}
+                    zoomLevel={1.5}
+                    alt={`Generated Certificate ${currentImageIndex}`}
+                  />
+                  <button
+                    className="ml-20 btn bg-gradient-to-b from-[#c70606] to-[#660505] text-white hover:bg-red-400 mt-2 "
+                    onClick={eliminarImagen}
+                  >
+                    Eliminar Certificado
+                  </button>
+                </>
               ) : (
-                <div>Carga correctamente los modelos de diplmados</div>
+                <div className="flex flex-col ml-96 mt-10 items-center text-center">
+                  <MdOutlineFileDownloadOff size={150} />
+                  <span className="font-extralight">
+                    Aún no hay diplomados generados :({" "}
+                  </span>
+                </div>
               )}
-              <button
-                className="ml-20 btn bg-blue-500 text-white hover:bg-red-400"
-                onClick={eliminarImagen}
-              >
-                Eliminar Certificado
-              </button>
             </div>
-          </div>
+
+
+
+
         </div>
       </div>
+
+
+
       <div>
         <dialog id="my_modal_1" className="modal" ref={modalRef}>
           <div className="modal-box">

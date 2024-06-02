@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { ImageDatabase } from "./ImageUploaderDB";
 import { participantDB } from "./ReadExcelParticipants";
 import { TbCertificate } from "react-icons/tb";
+
 import { MdDelete } from "react-icons/md";
-import { PacmanLoader } from 'react-spinners';
-import { HashLoader } from 'react-spinners';
+import { PropagateLoader } from 'react-spinners';
+
 
 
 const imageDB = new ImageDatabase();
+
+
 
 const CertificateGeneratorExcel = ({
   onCertificateGenerated,
@@ -476,18 +479,21 @@ for (var i = 0; i < cantidadModulos; i++) {
   return (
     <>
       <button
-        className="w-full btn  bg-gradient-to-b from-[#006fee] to-[#001d51] text-white border border-slate-300 hover:bg-gray-200 mt-2"
+        className="w-full btn text-xl font-futura-bkbt  items-center  bg-gradient-to-b from-[#006fee] to-[#001d51] text-white  hover:bg-gray-200  mb-5 rounded-lg "
         onClick={generateCertificates}
         disabled={generatingCertificates || !participantsExist}
       >
         {generatingCertificates ? (
-            <PacmanLoader color={'#ffffff'} size={15} />
+            <PropagateLoader color={'#ffffff'} size={10} />
+            
         ) : (
-          'Generar certificados para todos los participantes'
+          'Generar Diplomados'
+          
         )}
+        <TbCertificate size={25}/>
       </button>
       <button
-        className="w-full btn  bg-gradient-to-b from-[#c70606] to-[#660505] text-white hover:bg-red-400  mt-2"
+        className="w-full btn text-lg font-futura-bkbt bg-gradient-to-b from-[#c70606] to-[#660505] text-white hover:bg-red-400 mb-5"
         onClick={handleDelete}
       >
         Limpiar todos los Datos
