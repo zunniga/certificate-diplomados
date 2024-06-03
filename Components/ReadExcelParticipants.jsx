@@ -78,7 +78,7 @@ const ReadExcelParticipants = () => {
       console.log(participantes);
       await participantDB.participants.clear();
       await participantDB.participants.bulkAdd(participantes);
-      alert("Datos del Excel guardados correctamente.");
+      alert("Datos del Excel guardados correctamente :)");
       window.location.href = '/cursos';
     } catch (error) {
       alert("Error al leer el archivo Excel:", error);
@@ -127,17 +127,17 @@ const ReadExcelParticipants = () => {
   return (
     <div>
       <form method="dialog">
-        <label className="form-control w-full mb-4">Subir archivo de Excel:
+        <label className="form-control text-slate-200  w-full mb-4">
           <input
             id="fileInput"
-            className="file-input file-input-bordered w-full"
+            className="file-input file-input-info text-slate-200 file-input-bordered text w-full "
             type="file"
             accept=".xlsx, .xls, .xlsm"
             onChange={handleFileChange}
           />
         </label>
 
-        <button className="btn" type="button" onClick={generateCertificates}>Agregar datos Excel</button>
+        <button className="btn btn-info text-slate-50 items-center" type="button" onClick={generateCertificates}>Agregar</button>
       </form>
     </div>
   );

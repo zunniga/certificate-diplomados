@@ -4,13 +4,13 @@ export function ImageMagnifier({
     src,
 
     magnifierHeight = 100,
-    magnifieWidth = 100,
-    zoomLevel = 1.5
+    magnifierWidth = 100,
+    zoomLevel = 0.5
 }: {
     src: string;
     alt: string;
     magnifierHeight?: number;
-    magnifieWidth?: number;
+    magnifierWidth?: number;
     zoomLevel?: number;
 }) {
     const [[x, y], setXY] = useState([0, 0]);
@@ -19,15 +19,15 @@ export function ImageMagnifier({
 
     return (
         <div
-            className="image-container w-3/4" // Nuevo contenedor para la imagen
+            className="image-container w-3/4"
             style={{
                 position: "relative",
-                textAlign: "center", // Centrar horizontalmente
+                textAlign: "center",
             }}
         >
             <img
                 src={src}
-                className="image-content" // Nuevo estilo para la imagen
+                className="image-content"
                 onMouseEnter={(e) => {
                     const elem = e.currentTarget;
                     const { width, height } = elem.getBoundingClientRect();
@@ -52,17 +52,19 @@ export function ImageMagnifier({
                     position: "absolute",
                     pointerEvents: "none",
                     height: `${magnifierHeight}px`,
-                    width: `${magnifieWidth}px`,
+                    width: `${magnifierWidth}px`,
                     top: `calc(${y * 100}% - ${magnifierHeight / 2}px)`,
-                    left: `calc(${x * 100}% - ${magnifieWidth / 2}px)`,
+                    left: `calc(${x * 100}% - ${magnifierWidth / 2}px)`,
                     opacity: "1",
                     border: "1px solid lightgray",
                     backgroundColor: "white",
                     backgroundImage: `url('${src}')`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: `${imgWidth * zoomLevel}px ${imgHeight * zoomLevel}px`,
-                    backgroundPositionX: `${-x * imgWidth * zoomLevel + magnifieWidth / 2}px`,
-                    backgroundPositionY: `${-y * imgHeight * zoomLevel + magnifierHeight / 2}px`
+                    backgroundPositionX: `${-x * imgWidth * zoomLevel + magnifierWidth / 2}px`,
+                    backgroundPositionY: `${-y * imgHeight * zoomLevel + magnifierHeight / 2}px`,
+                    borderRadius: "50%", // Hacer la lupa circular
+                    boxShadow: "0 0 8px rgba(0, 0, 0, 0.6)" // Añadir una sombra para resaltar la lupa
                 }}
             ></div>
         </div>

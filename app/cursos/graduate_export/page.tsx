@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import jsPDF from "jspdf";
+import Confetti from "react-confetti";
 import { ImageDatabase } from "@/Components/ImageUploaderDB";
 import ParticipanteName from "@/Components/CertificateGenerator";
 import { GrLinkNext } from "react-icons/gr";
@@ -30,38 +31,39 @@ const CertificatesTable: React.FC<{
 }> = ({ certificates, title }) => {
   return (
     <div>
-  <h2 className="text-lg mb-2">{title}</h2>
-  <table className="rounded-xl table table-xs table-auto table-pin-rows mb-4">
-    <thead>
-      <tr>
-        <th>Nombre del Participante</th>
-        <th>Verificado</th>
-      </tr>
-    </thead>
-    <tbody>
-      {certificates.map((certificate, index) => (
-        <tr key={index}>
-          <td>{certificate.ownerName}</td>
-          <td>
-            {certificate.certificateUploaded ? (
-              <BsCheckCircleFill className="text-green-500" size={30} />
-            ) : (
-              <span>
-                {certificate.ownerName} <BsXCircleFill className="text-red-700" size={30} />
-              </span>
-            )}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
-
+      <h2 className="text-lg mb-2">{title}</h2>
+      <table className="rounded-xl table table-xs table-auto table-pin-rows mb-4">
+        <thead>
+          <tr>
+            <th>Nombre del Participante</th>
+            <th>Verificado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {certificates.map((certificate, index) => (
+            <tr key={index}>
+              <td>{certificate.ownerName}</td>
+              <td>
+                {certificate.certificateUploaded ? (
+                  <BsCheckCircleFill className="text-green-500" size={30} />
+                ) : (
+                  <span>
+                    {certificate.ownerName}{" "}
+                    <BsXCircleFill className="text-red-700" size={30} />
+                  </span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
 export default function Home() {
+  const [mostrarConfetti, setMostrarConfetti] = useState(false);
+
   const [digitalCertificates, setDigitalCertificates] =
     useState<CertificatesList>([]);
   const [physicalCertificates, setPhysicalCertificates] =
@@ -167,8 +169,9 @@ export default function Home() {
           throw new Error("Error al enviar los datos a la API.");
         }
       }
-
+    
       alert("Datos Guardados Correctamente!");
+      setMostrarConfetti(true);
     } catch (error) {
       console.error("Error al enviar los datos a la API:", error);
       alert("Error al enviar los datos.");
@@ -257,6 +260,7 @@ export default function Home() {
                 >
                   Exportar en PDF (Excel)
                   <RiFileExcel2Fill className="" size={25} color="#" />
+                  {mostrarConfetti && <Confetti numberOfPieces={400} recycle={false}/>}
                 </button>
                 <button
                   className="w-full text-xl font-futura-bkbt btn bg-gradient-to-b from-[#006fee] to-[#001d51] text-[#ffff] hover:bg-white mb-5"
@@ -285,7 +289,6 @@ export default function Home() {
                 <CertificatesTable
                   certificates={digitalCertificates}
                   title=""
-                  
                 />
               </div>
               <div className="bg-[#001d51] border rounded-lg p-10 text-white">

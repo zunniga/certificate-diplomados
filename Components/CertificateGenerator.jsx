@@ -566,9 +566,9 @@ const CertificateGenerator = () => {
           className="input bg-[#649bdd] input-bordered flex items-center mb-4"
           htmlFor="FechaInicio"
         >
-        <h1 className="mr-6" > Fecha de Inicio:  </h1>
+        <h1 className="mr-6 text-slate-100" > Fecha de Inicio:  </h1>
           <input
-          className=""
+          className="text-slate-100"
             required
             placeholder="Fecha de inicio"
             type="date"
@@ -583,8 +583,9 @@ const CertificateGenerator = () => {
           className="input bg-[#649bdd] input-bordered flex items-center mb-4"
           htmlFor="FechaFin"
         >
-           <h1 className="mr-6" > Fecha de Finalización:  </h1>
+           <h1 className="mr-6 text-slate-100"  > Fecha de Finalización:  </h1>
           <input
+          className="text-slate-100"
             required
             placeholder="Fecha de fin"
             type="date"
@@ -683,13 +684,13 @@ const CertificateGenerator = () => {
 
         <select
           required
-          className="select bg-[#649bdd] select-bordered w-full mb-4"
+          className="select bg-[#649bdd] text-slate-100 select-bordered w-full mb-4"
           id="imageType"
           value={selectedImageType}
           onChange={(e) => setSelectedImageType(e.target.value)}
         >
           <option defaultValue>Seleccionar tipo de certificado</option>
-          <option value="tipo4">Diplomado Físico</option>
+          <option value="tipo4 text-slate-100">Diplomado Físico</option>
         </select>
 
         <button

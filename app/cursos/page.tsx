@@ -259,7 +259,7 @@ export default function Home() {
                   <ImageMagnifier
                     src={generatedCertificates[currentImageIndex]}
                     magnifierHeight={150}
-                    magnifieWidth={300}
+                    magnifierWidth={300}
                     zoomLevel={1.5}
                     alt={`Generated Certificate ${currentImageIndex}`}
                   />
@@ -302,17 +302,16 @@ export default function Home() {
         </dialog>
 
         <dialog id="excel_modal" className="modal" ref={excelModalRef}>
-          <div className="modal-box">
-            <div className="flex justify-between items-center">
-              <h3 className="font-bold text-lg mb-4">Insertar por Excel</h3>
-              <button className="close-button" onClick={closeExcelModal}>
-                <IoCloseCircle className="text-red-500 h-8 w-8 mb-4" />
-              </button>
-            </div>
-
-            <ReadExcelParticipants />
+        <div className="modal-box bg-cyan-300/20">
+          <div className="flex justify-between items-center">
+            <h3 className="font-futura-bkbt font-bold text-[#e8e9eb] text-lg mb-4">INSERTAR POR EXCEL</h3>
+            <button className="btn btn-ghost" onClick={closeExcelModal}>
+              <IoCloseCircle className="text-red-500 h-8 w-8 mb-4" />
+            </button>
           </div>
-        </dialog>
+          <ReadExcelParticipants />
+        </div>
+      </dialog>
       </div>
     </div>
   );

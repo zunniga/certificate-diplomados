@@ -82,6 +82,10 @@ const CertificateGeneratorExcel = ({
         imageData[image.name] = image.imageDataURL;
       });
 
+
+
+
+
       // Obtener el array selectedCertificates del localStorage
       const selectedCertificates = JSON.parse(
         sessionStorage.getItem("selectedCertificates")
@@ -134,8 +138,9 @@ const CertificateGeneratorExcel = ({
       }
 
       alert(
-        "Certificados generados exitosamente para todos los participantes."
+            "Diplomados Gernerados exitosamente"
       );
+
       // Llamar a la función onCertificateGenerated al completar la generación de certificados
       onCertificateGenerated();
     } catch (error) {
